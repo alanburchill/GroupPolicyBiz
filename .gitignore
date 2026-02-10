@@ -1,0 +1,73 @@
+# Generated site output
+_site/
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+*.bak
+*~
+.cache/
+
+# Backup files (if you create local backups)
+*.zip
+*.xml.bak
+*.sanitized.xml
+content/posts_backup*/
+content/posts_old*/
+
+# Local private markdown files (not public)
+private_md/
+
+# Local tools and utilities (not public)
+tools/
+
+# WordPress export files (large XML files)
+grouppolicycentral*.xml
+
+# Database files
+*.sql
+uploads/database.sql
+
+# WordPress plugin cache/temp directories
+uploads/epub-tmp/
+uploads/wpcf7_captcha/
+uploads/wpcf7_uploads/
+uploads/nginx-helper/
+uploads/wptouch/
+uploads/cwp_tiles/
+
+# Temporary screenshots and images
+screenshot*.png
+screenshot*.jpg
+
+# Node modules (if you add Node.js later)
+node_modules/
+package-lock.json
+
+# Test results
+test-results/
+playwright-report/
+
+.sitemap/
+.playwright-mcp/

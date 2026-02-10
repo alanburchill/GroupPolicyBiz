@@ -1,0 +1,12 @@
+---
+title: "How to use Group Policy to restore missing second printer in Windows 7"
+date: 2010-03-02 07:59:01
+author: admin
+categories: ["Tutorials"]
+tags: ["Intermediate", "Printer", "Windows 7"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2010/03/win7_duplicate_printer_thumb1.png"
+---
+
+Aamer Shedam from Microsoft's [Ask the Performance Team](<http://blogs.technet.com/askperf>) has just blogged about how Windows 7 will only show one printer in "Devices and Printers" if you have that same two printers installed on the one computer (see below). [![win7_duplicate_printer](https://www.grouppolicy.biz/wp-content/uploads/2010/03/win7_duplicate_printer_thumb1.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/03/win7_duplicate_printer1.png>) If your an IT Administrator and you want to configured the "Printer" view in Windows Explorer to show an icon for each printer using Group Policy then take a look at my instructions below. **Key:** HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\\{2227a280-3aea-1069-a2de-08002b30309d} **Value:** (Default) **Data:** Printers Step 1. Edit a Group Policy Object that is applied to all the workstation you want this Browser Ballot disabled. Step 2. Navigate to Computer Configuration > Preferences > Windows Settings > Registry and create a "New Registry Item" Step 3. Type "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\\{2227a280-3aea-1069-a2de-08002b30309d}" in the Key Path tick "Default", then select REG_DWORD as the value type "Printers" in the value data and then click "OK". [![image](https://www.grouppolicy.biz/wp-content/uploads/2010/03/image_thumb14.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/03/image14.png>) Now all your computers will display this view in Windows Explorer. [![Win7_PrinterView](https://www.grouppolicy.biz/wp-content/uploads/2010/03/Win7_PrinterView_thumb1.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/03/Win7_PrinterView1.png>) Links:
+
+  * See the blog post here [Windows 7: Where are my printers?](<http://blogs.technet.com/askperf/archive/2010/03/02/windows-7-where-are-my-printers.aspx> "http://blogs.technet.com/askperf/archive/2010/03/02/windows-7-where-are-my-printers.aspx")

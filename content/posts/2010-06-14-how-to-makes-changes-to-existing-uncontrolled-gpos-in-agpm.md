@@ -1,0 +1,23 @@
+---
+title: "AGPM Part 7: How to makes changes to existing uncontrolled GPO&rsquo;s in AGPM"
+date: 2010-06-14 10:27:00
+author: admin
+categories: ["Tutorials"]
+tags: ["Advanced Group Policy Management", "AGPM", "Intermediate"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2010/01/image_thumb155.png"
+---
+
+This post is part of a series of posts about Advanced Group Policy Management. If you want to see the other post in this series you can use the links below:
+
+  1. [Introduction to Advanced Group Policy Management (a.k.a AGPM) v4](<https://www.grouppolicy.biz/2010/06/introduction-to-advanced-group-policy-management-a-k-a-agpm-v4>)
+  2. [How to install the Advanced Group Policy Management Client v4](<https://www.grouppolicy.biz/2010/06/how-to-install-the-advanced-group-policy-management-agpm-client-v4>)
+  3. [How to install the Advanced Group Policy Management (AGPM) Server v4](<https://www.grouppolicy.biz/2010/06/how-to-install-advanced-group-policy-management-server-v4>)
+  4. [How to configure the AGPM client via Group Policy to automatically connect to the AGPM server](<https://www.grouppolicy.biz/2010/06/how-to-configure-the-agpm-client-via-group-policy-to-automatically-connect-to-the-agpm-server>)
+  5. [Delegating permission to Review/Edit GPO's in AGPM](<https://www.grouppolicy.biz/2010/06/delegating-permission-to-reviewedit-gpos-in-agpm>)
+  6. [How to create make changes to Group Policy Objects in AGPM](<https://www.grouppolicy.biz/2010/06/how-to-create-make-changes-to-group-policy-objects-in-agpm>)
+  7. How to makes changes to existing uncontrolled GPO's in AGPM
+
+
+### Editing existing uncontrolled GPO's in AGPM
+
+If you are deploying AGPM into an existing environment (and you probably are) then you will probably want to editing you existing GPO's. Any GPO that is not managed by AGPM is called an "Uncontrolled" GPO and as such will not be touched until it is specifically made into a "Controlled" policy. **Step 1.** Logon as Alan to a computer that has GPMC and the AGPM client **Step 2.** Open GPMC and click on **Change Control** and then then **Uncontrolled** tab then right click on the GPO you want to "Control" and then click on **Control"...** **** [![image](https://www.grouppolicy.biz/wp-content/uploads/2010/01/image_thumb155.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/01/image160.png>)  **Step 3.** Add a comment to the GPO as its initial comment then click **OK** **** [![image](https://www.grouppolicy.biz/wp-content/uploads/2010/01/image_thumb156.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/01/image161.png>) This Group Policy is now "controlled"  [![image](https://www.grouppolicy.biz/wp-content/uploads/2010/01/image_thumb162.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/01/image167.png>) Hopefully this has series given you enough of an introduction to AGPM to get it installed and start to perform basic changes and approvals to GPO setting "... If you want more information on Advanced Group Policy Management then here is a list of link to pages I have found useful: [Microsoft MDOP Blog](<http://blogs.technet.com/mdop> "http://blogs.technet.com/mdop") [TechNet: Overview of Advanced Group Policy Management](<http://technet.microsoft.com/en-au/library/ee532079.aspx> "http://technet.microsoft.com/en-au/library/ee532079.aspx") [TechNet: A Video tour of Advanced Group Policy Management](<http://technet.microsoft.com/en-us/windows/ee526426.aspx> "http://technet.microsoft.com/en-us/windows/ee526426.aspx") [TechNet: Technical Overview of AGPM](<http://technet.microsoft.com/en-au/library/ee390978.aspx> "http://technet.microsoft.com/en-au/library/ee390978.aspx") [TechNet: What's New in AGPM](<http://technet.microsoft.com/en-us/library/ee390977.aspx> "http://technet.microsoft.com/en-us/library/ee390977.aspx") [TechNet: Choosing Which Version of AGPM to Install](<http://technet.microsoft.com/en-au/library/dd553090.aspx> "http://technet.microsoft.com/en-au/library/dd553090.aspx") [TechNet: Step-by-Step Guide for Microsoft Advanced Group Policy Management 4.0](<http://technet.microsoft.com/en-us/library/ee378482.aspx> "http://technet.microsoft.com/en-us/library/ee378482.aspx") [TechNet: Operation Guide for Microsoft Advanced Group Policy Management 4.0](<http://technet.microsoft.com/en-us/library/ee390965.aspx> "http://technet.microsoft.com/en-us/library/ee390965.aspx") [Group Policy Blog: Importing and Exporting with AGPM](<http://blogs.technet.com/b/grouppolicy/archive/2010/06/11/importing-and-exporting-with-agpm.aspx>)

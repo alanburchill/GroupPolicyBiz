@@ -1,0 +1,10 @@
+---
+title: "Windows 8 and Internet Explorer 10 Administrative Templates"
+date: 2013-03-21 02:10:05
+author: admin
+categories: ["News"]
+tags: ["ADM", "Administrative Templates", "ADMX", "Internet Explorer 10", "Windows 8"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2013/03/COG.png"
+---
+
+[![COG](https://www.grouppolicy.biz/wp-content/uploads/2013/03/COG.png)](<https://www.grouppolicy.biz/wp-content/uploads/2013/03/COG.png>)Microsoft has recently released some new Administrative Templates that allow you to configure their newest software on down level Operating Systems. The Internet Explore 10 ADM files are useful if you want to edit Internet Explorer Administrative Settings from a computer that is still running Windows XP or Server 2003. Don't be confused however as this does not mean you can install Internet Explorer 10 on XP it just means you will be able to edit the policy settings. The Windows 8 / Server 2012 ADMX files are also released and it allows you to easily load up the new Windows 8 Group Policy Administrative templates on a Windows Vista/7 computer with GPMC. Again this is very handy if you still edit your Group Policy settings from a Windows 7 computer but you have a few Windows 8/2012 computers in your organisation. To install both of these administrative template simply install them on the computer that you are editing the GPO's. Then the GPO's you edit from the computer will be automatically upgrade next time you open the via GP Editor. As always it is still the best idea as it is always recommend to edit Group Policy Objects from the most recent OS in your environment but at least the template updates allows this scenario if you need to edit GPO's from older computers. **Links:** IE 10 <http://www.microsoft.com/en-us/download/details.aspx?id=37009> Windows 8 / 2012 <http://www.microsoft.com/en-us/download/details.aspx?id=36991>

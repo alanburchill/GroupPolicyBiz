@@ -1,0 +1,10 @@
+---
+title: "Group Policy Setting of the Week 6 "“ Exclude directories in roaming profile"
+date: 2009-12-21 13:51:12
+author: admin
+categories: ["Setting of the Week"]
+tags: ["Basic", "Group Policy"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2010/01/image_thumb69.png"
+---
+
+Today on Group Policy Setting of the Week we are going to be taking a look at "Exclude directories in roaming profile" which can be found in the deepest darkest regions of User Configuration > Policies > Administrative Templates > System > User Profiles. This setting is useful in organisations that have Roaming Profiles configured but want to make sure that the roaming profile size does not blow out thus slow doing the users logon and log off or the computer. This option can be used to exclude specific folders of poorly written application from the roaming profile if they write large amounts of data (e.g. caches) to incorrect locations. [![Exclude directories in roaming profile](https://www.grouppolicy.biz/wp-content/uploads/2010/01/image_thumb69.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/01/image71.png>) A classic example of this was when Google Earth was first released it saved cache files to the users roaming profile folder which meant their profile size quickly swelled to over 1gb. User then quickly started to complain that it took a a long time to logon and logoff their computer (go figure). Enabling this option allowed the specific cached folders to be excluded from their roaming profile and therefore a much smaller roaming profile was copied to and from the server making their login's and logoffs much quicker. The side affect of this is that the setting saved to the folders you exclude will no longer roam with the user when they logon a new computer. Very handy if you want to keep roaming profiles to a small size which in turn will speed up the users logon and logoff processes. This setting will work with Windows 2000 or greater and multiple paths can be appended with a ; as a delimiter between the entries.

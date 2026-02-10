@@ -1,0 +1,10 @@
+---
+title: "Group Policy Setting of the Week 1 "“ How to remove old user profiles after X days"
+date: 2009-11-06 13:40:07
+author: admin
+categories: ["Setting of the Week"]
+tags: ["Basic", "Group Policy", "Profile"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2010/01/image_thumb60.png"
+---
+
+(This will hopefully be the first of many Group Policy Setting of the Week (or GPSW) articles where I will showcase one policy setting and what it does.) I just read about this cool new policy setting on the "Ask the Performance Team" blog that will help address the issues of computers hard drives filling up over time with multiple user profiles. Previously you either had the option to purge the local users profile on log off or keep a cached copy of the profile forever. Either users would have to download their profile every time they logon to the computer which could greatly slow down the logon process or their cached profiles was never deleted which resulted in the system drive running out of space. This new setting "Delete user profiles older than a specified number of days on system restart" allows you to set a timer on the local cached profiles so that they will be purged X number of days after being used. This means users who commonly logon to a particular computer will still have their profile cached but users that logon seldomly will have their files cleaned up thus saving precious disk space. This might sound like a great setting to implement on a Terminal Server however note the clean up wont happen until the server is rebooted. This restriction should not be so bad as Terminal Servers are probably rebooted at least once a month any way for patching (you do patch your terminal servers don't you?). This setting can be found under Computer Configuration \ Policies \ Administrative Templates \ System \ User Profiles [![image](https://www.grouppolicy.biz/wp-content/uploads/2010/01/image_thumb60.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/01/image62.png>) Source: <http://blogs.technet.com/askperf/archive/2009/11/03/just-me-and-my-profile-part-2.aspx>

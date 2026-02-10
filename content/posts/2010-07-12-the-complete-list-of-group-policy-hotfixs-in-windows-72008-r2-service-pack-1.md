@@ -1,0 +1,33 @@
+---
+title: "The complete list of Group Policy Hotfix&rsquo;s in Windows 7/2008 R2 Service Pack 1"
+date: 2010-07-12 22:32:00
+author: admin
+categories: ["News"]
+tags: ["GPMC", "GPO", "Group Policy", "hotfix", "Service Pack 1", "Windows 7", "Windows Server 2008 R2"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2010/07/windows7logo_thumb.jpg"
+---
+
+[![windows-7-logo](https://www.grouppolicy.biz/wp-content/uploads/2010/07/windows7logo_thumb.jpg)](<https://www.grouppolicy.biz/wp-content/uploads/2010/07/windows7logo.jpg>)The beta of [Windows 7/Server 2008 R2 Service Pack 1 beta](<http://www.microsoft.com/windowsserver2008/en/us/sp1.aspx>) has [now been released to the public](<http://technet.microsoft.com/en-us/evalcenter/ff183870.aspx>) for testing. For your benefit I have parsed through the [complete list of hotfixes](<http://www.microsoft.com/downloads/details.aspx?displaylang=en&FamilyID=61924cea-83fe-46e9-96d8-027ae59ddc11>) and I have listed out all the group policy specific setting. If you just want the service pack right now you can download it here <http://technet.microsoft.com/en-us/evalcenter/ff183870.aspx> I have highlighted the two hotfixes that stand out it my mind as the issues that have been most annoying bugs with group policy with Windows 7 RTM. I have also posted an installation screenshot walk though on my other blog here <http://www.smartergeek.info/2010/07/install-screenshots-windows-7-service-pack-1-beta/> Hotfix Description | Link to support article
+---|---
+After Internet Explorer Maintenance Group Policy settings are configured in a domain, a 20-second delay occurs when you log on to the domain from a client computer that has Internet Explorer 7 or Internet Explorer 8 installed | [http://support.microsoft.com/kb/941158](<http://support.microsoft.com/kb/941158>)
+FIX: You cannot import or paste some group policies across domains by using the "Group Policy Management" MMC snap-in | [http://support.microsoft.com/kb/969867](<http://support.microsoft.com/kb/969867>)
+SceCli 1202 events are logged every time Computer Group Policy settings are refreshed on a computer that is running Windows Server 2008 R2 or Windows 7 | [http://support.microsoft.com/kb/974639](<http://support.microsoft.com/kb/974639>)
+Roaming user profile cache is not deleted from a Windows Server 2003-based computer if Group Policy preferences and Internet Explorer Maintenance Group Policy settings are used | [http://support.microsoft.com/kb/975619](<http://support.microsoft.com/kb/975619>)
+LDAP filters in the Group Policy preference settings do not take effect on a computer that is running Windows Server 2008 R2 or Windows 7 | [http://support.microsoft.com/kb/976398](<http://support.microsoft.com/kb/976398>)
+FIX: You cannot apply Group Policy settings on a computer that is running Windows 7 or Windows Server 2008 R2 when security group filters are used in Group Policy preference settings | [http://support.microsoft.com/kb/976399](<http://support.microsoft.com/kb/976399>)
+**A Group Policy Immediate Task preference item does not run on a client computer that is running Windows 7 or Windows Server 2008 R2** | [http://support.microsoft.com/kb/977353](<http://support.microsoft.com/kb/977353>)
+The SceCli 1202 events are logged when some Group Policy settings are refreshed in Windows Server 2008 R2 and in Windows 7 | [http://support.microsoft.com/kb/977695](<http://support.microsoft.com/kb/977695>)
+**The "Desktop Wallpaper" Group Policy setting is not applied in Windows 7 or in Windows Server 2008 R2** | [http://support.microsoft.com/kb/977944](<http://support.microsoft.com/kb/977944>)
+Logoff process stops responding after you create a logoff Group Policy script on a client computer that is running Windows Vista or Windows Server 2008 | [http://support.microsoft.com/kb/978489](<http://support.microsoft.com/kb/978489>)
+The Group Policy Management Editor window crashes when you apply some changes for NRPT policy settings | [http://support.microsoft.com/kb/978837](<http://support.microsoft.com/kb/978837>)
+Error message when you view or modify the migrated Group Policy objects in Windows Server 2008 R2: "Attribute cannot be empty" | [http://support.microsoft.com/kb/979039](<http://support.microsoft.com/kb/979039>)
+After you apply a WMI filter, the GPO does not take effect on a client computer that is running Windows 7 or Windows Server 2008 R2 | [http://support.microsoft.com/kb/979383](<http://support.microsoft.com/kb/979383>)
+Some Group Policy preferences are not applied successfully on computers that are running Windows 7 or Windows Server 2008 R2 | [http://support.microsoft.com/kb/979731](<http://support.microsoft.com/kb/979731>)
+The "Allow the printing of background colors and images" Group Policy setting does not take effect on a computer that has Internet Explorer 8 installed | [http://support.microsoft.com/kb/980077](<http://support.microsoft.com/kb/980077>)
+The "Load a specific theme" Group Policy setting is not applied correctly on a computer that is running Windows 7 or Windows Server 2008 R2 | [http://support.microsoft.com/kb/980628](<http://support.microsoft.com/kb/980628>)
+The "Configure new tab page default behavior" Group Policy setting does not work on a computer that is running Windows 7 or Windows Server 2008 R2 and that has Internet Explorer 8 installed | [http://support.microsoft.com/kb/980959](<http://support.microsoft.com/kb/980959>)
+The Group Policy preference settings for the "Terminal Session" item-level targeting item are not applied in Windows 7 or in Windows Server 2008 R2 | [http://support.microsoft.com/kb/981054](<http://support.microsoft.com/kb/981054>)
+You can still unpin a program from the taskbar unexpectedly when you enable the "Do not allow pinning programs to the Taskbar" Group Policy on a computer that is running Windows 7 or Windows Server 2008 R2 | [http://support.microsoft.com/kb/981177](<http://support.microsoft.com/kb/981177>)
+You cannot create a software installation Group Policy setting on a read-only domain controller in Windows Server 2008 R2 | [http://support.microsoft.com/kb/981265](<http://support.microsoft.com/kb/981265>)
+Error message occurs when you use GPMC to view a software restriction Group Policy setting in Windows 7 and in Windows Server 2008 R2: "An error has occurred while collecting data for Software Restriction Policies" | [http://support.microsoft.com/kb/981750](<http://support.microsoft.com/kb/981750>)
+You cannot open an HTML GPO report that is created by the German version of Windows Server 2008 R2 or of Windows 7 | [http://support.microsoft.com/kb/981877](<http://support.microsoft.com/kb/981877>)

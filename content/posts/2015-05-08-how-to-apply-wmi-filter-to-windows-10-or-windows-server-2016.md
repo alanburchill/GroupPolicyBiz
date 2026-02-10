@@ -1,0 +1,18 @@
+---
+title: "How to apply WMI Filter to Windows 10 or Windows Server 2016"
+date: 2015-05-08 08:12:10
+author: admin
+categories: ["Tutorials"]
+tags: ["Intermediate", "Windows 10", "Windows Server 2016", "WMI"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2015/01/win10_windows_startscreen2a_Web.jpg"
+---
+
+[![Windows 10 Technical Preview Start Menu](https://www.grouppolicy.biz/wp-content/uploads/2015/01/win10_windows_startscreen2a_Web.jpg)](<https://www.grouppolicy.biz/wp-content/uploads/2015/01/win10_windows_startscreen2a_Web.jpg>)As you are probably already aware, Microsoft is soon going to be releasing the next version of Windows called... drum roll... Windows 10. Some of you might have already download the production by downloading the technical preview of Windows 10 as part of the [Insider Preview](<https://insider.windows.com/>). However, what you might not know is that the version number of Windows 10 is also taking a big leap forward from 6.3 to 10.0 (as you can see below). Windows 8.1 Version Number ![Win81Version](https://www.grouppolicy.biz/wp-content/uploads/2015/05/Win81Version.png) Windows 10 Version Number (Technical Preview 2) ![Win10Version](https://www.grouppolicy.biz/wp-content/uploads/2015/05/Win10Version.png) Whenever Windows changes version number there is always applications compatibility issues. These have largely been mitigated for Windows 10 applications HOWEVER... WMI filter queries are affected by this change. The example below might be familiar as it is a common way to apply a GPO to all Versions of WIndows after 7. It would also automatically work for Windows 8 and Windows 8.1 but it will fail for Windows 10.
+
+> select * from Win32_OperatingSystem where Version >= "6.1"
+
+The problem stems from the comparison that WMI does as it treats the version as a string and not a number. This means that Version "10" is actually lower than "6.0" as 1 is lower that 6. As you can see below in my example the same WMI filter as above is evaluating as False on my Windows 10 computer (called Win10). [![Win10WMI](https://www.grouppolicy.biz/wp-content/uploads/2015/05/Win10WMI-800x59.png) ](<https://www.grouppolicy.biz/wp-content/uploads/2015/05/Win10WMI.png>) So... To have a WMI filter that matches Windows 7 or later (including Windows 10) then you need to use the following WMI filter:
+
+> select * from Win32_OperatingSystem where Version like "10.%" or Version >="6.1"
+
+This will evaluate true for Windows 10 AND any version of Windows greater that Windows 7 (6.1) as the report below shows. [![Win10WMI2](https://www.grouppolicy.biz/wp-content/uploads/2015/05/Win10WMI2-800x85.png) ](<https://www.grouppolicy.biz/wp-content/uploads/2015/05/Win10WMI2.png>) In this example I have added used the like operator with the % wildcard so it will match any preview build of Windows 10. This will not work if Microsoft release a version of the OS with 11 version number, but as Microsoft have now said that Windows is going to be a service its a safe bet that this will work for a long while to come. Of course the final version of Windows 10 has not been released yet so this might still change. However if you are testing Windows 10 in your environment now and you are wondering why the WMI filters GPO's are applying this is your you can get going today. Note: The same is also true for Windows Server 2016 as it has the same OS version number. Thanks to [Michale Niehaus ](<http://twitter.com/mniehaus>)for his help with this article.

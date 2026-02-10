@@ -1,0 +1,10 @@
+---
+title: "How to disable Java in IE using Group Policy"
+date: 2013-01-14 01:40:25
+author: admin
+categories: ["Tutorials"]
+tags: ["Disable", "Group Policy", "Intermediate", "Internet Explorer"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2013/01/No_Java_thumb.jpg"
+---
+
+[![No_Java](https://www.grouppolicy.biz/wp-content/uploads/2013/01/No_Java_thumb.jpg)](<https://www.grouppolicy.biz/wp-content/uploads/2013/01/No_Java.jpg>)You may already be aware there is a pretty serious vulnerability with Java that has just been patched (see [Security Alert for CVE-2013-0422 Released](<https://blogs.oracle.com/security/entry/security_alert_for_cve_2013>) ) on pretty much all versions of the program. For some people however this may get them questioning if they need Java installed at all on their computers. Personally I have uninstalled Java off my friends and family computers for the past few years without anyone every complaining. Certainly other Microsoft MVP;s are also finding that having Java disabled in the browser seems to have little of no affect (see <https://twitter.com/troyhunt/status/290589939782000641> ) as most web sites no longer user Java applets. However as an avid gamer IT Professional I am fully that some programs require Java to be installed to allow the full desktop apps to work (like Minecraft). So you may be please to know there is a way to Disable Java in Internet Explorer thus greatly reducing the risk of having Java installed"... While Java is not normally configured via a registry thanks to [@rickd4real](<mailto:r@rickd4real>) (Via) [@stealthpuppy](<https://twitter.com/stealthpuppy/status/290402966740017152>) I have been able to extract the Group Policy Preference Registry file that you can quick import into your GPO to disable Java in IE for Users of Computers.  **Disclaimer:** Use at your own risk. I am trusting the registry keys provided are sufficient to disable Java. **Update:** Additional info at Microsoft KB : <http://support.microsoft.com/kb/2751647>

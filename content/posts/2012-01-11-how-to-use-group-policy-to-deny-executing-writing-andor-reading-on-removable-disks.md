@@ -1,0 +1,10 @@
+---
+title: "How to use Group Policy to deny executing, writing and/or reading on removable disks"
+date: 2012-01-11 02:42:59
+author: admin
+categories: ["Tutorials"]
+tags: ["deny", "execute", "read", "Security", "USB", "Windows 7", "write"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2012/01/usbThumb_thumb.png"
+---
+
+[![usbThumb](https://www.grouppolicy.biz/wp-content/uploads/2012/01/usbThumb_thumb.png)](<https://www.grouppolicy.biz/wp-content/uploads/2012/01/usbThumb.png>)Removable memory sticks are the back door for data in any organisation. BitLocker to Go can do some way to controlling this vector however you might want to simple close off all access to removable drives for all your users. So if you are running Windows 7 you will be glad to know there are a heap of Windows 7 GPO setting that allows you to control access to your removable devices. Even better there is a deny execute access policy setting prevents your users the running on BYO applications such as [Firefox Portable](<http://en.wikipedia.org/wiki/Firefox_Portable> "http://en.wikipedia.org/wiki/Firefox_Portable") and even some malicious software via USB sticks. [![image](https://www.grouppolicy.biz/wp-content/uploads/2012/01/image_thumb1.png)](<https://www.grouppolicy.biz/wp-content/uploads/2012/01/image1.png>) While most of the device types seem obvious, the WPD Device allows you to control access "to removable disks, which may include media players, cellular phones, auxiliary displays, and CE devices.". You can even configure the "Time (in seconds) to force reboot" which will enforce the change once it is applied to the computer. These policy setting can be found under Computer Configuration > Policies > Administrative Templates > System > Removable Storage Access. Its the best thing to control access to USB storage device since the invention of the hot glue gun"....

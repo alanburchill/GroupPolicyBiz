@@ -1,0 +1,10 @@
+---
+title: "Hotfix: IE 8 restores the search provider settings when the &quot;Prevent Internet Explorer Search box from displaying&quot; Group Policy setting is enabled"
+date: 2010-07-29 01:39:50
+author: admin
+categories: ["News"]
+tags: ["hotfix", "Internet Explorer", "KB2171141", "Search box"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2010/07/image_thumb122.png"
+---
+
+A new hotfix ([KB2171141](<http://support.microsoft.com/kb/2171141/en-gb>)) is out from Microsoft that resolves an issues with the IE8 search provider when applying the "Prevent Internet Explore Search box from displaying" is enabled (see image below). [![image](https://www.grouppolicy.biz/wp-content/uploads/2010/07/image_thumb122.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/07/image127.png>) This policy will remove remove the search box from Internet Explorer (see image below). [![image](https://www.grouppolicy.biz/wp-content/uploads/2010/07/image_thumb123.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/07/image128.png>) But then when a user logs on to the computer for the first time they are prompted to setup their default IE setting and then they will get this error message (see image below). [![image](https://www.grouppolicy.biz/wp-content/uploads/2010/07/image_thumb124.png)](<https://www.grouppolicy.biz/wp-content/uploads/2010/07/image129.png>) It also looks like this hotfix is also probably not going to be in Windows 7 Service Pack 1 as it is not listed in the [complete list of hotfixes](<http://www.microsoft.com/downloads/details.aspx?displaylang=en&FamilyID=61924cea-83fe-46e9-96d8-027ae59ddc11>). To download the hotfix and to get more info visit [Internet Explorer 8 restores the search provider settings when the "Prevent Internet Explorer Search box from displaying" Group Policy setting is enabled](<http://support.microsoft.com/kb/2171141/en-gb>)

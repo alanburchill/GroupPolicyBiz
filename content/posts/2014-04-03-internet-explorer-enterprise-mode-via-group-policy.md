@@ -1,0 +1,26 @@
+---
+title: "Internet Explorer Enterprise Mode via Group Policy"
+date: 2014-04-03 01:15:00
+author: admin
+categories: ["News", "Tutorials"]
+tags: ["Enterprise Mode", "Internet Explorer"]
+featured_image: "https://www.grouppolicy.biz/wp-content/uploads/2014/03/image_thumb3.png"
+---
+
+![image](https://www.grouppolicy.biz/wp-content/uploads/2014/03/image_thumb3.png)With the release of Windows 8.1 Update Microsoft has introduced a new feature Internet Explorer Enterprise Mode. This allows admins to assign via Group Policy a way to force web site to render using specific browser modes. Internet Explorer has has a long heritage and each new version of the browser shipped has had the rendering engine of the previous installed for compatibility. This option can be invoked by a user by pressing the F12 and then selecting the Document Mode they want to render the page with (see below). [![image](https://www.grouppolicy.biz/wp-content/uploads/2014/03/image_thumb4.png)](<https://www.grouppolicy.biz/wp-content/uploads/2014/03/image4.png>) The problem is how IE determine what browsing mode the browser mode should use (See <http://blogs.msdn.com/b/ie/archive/2010/03/02/how-ie8-determines-document-mode.aspx>) is never an exacting science and it sometimes gets it wrong. One way was for the web site authors update a meta tag or the host header of the web site to tell the browser to use a particular rendering mode (see <http://blogs.msdn.com/b/ie/archive/2010/06/16/ie-s-compatibility-features-for-site-developers.aspx>). However many organisation have had web sites created internally where the authors have long gone. Therefore Internet Explorer by default will render any intranet web site in the "Intranet Zone" as using the IE7 rendering engine. But buy displaying all the "Intranet Zone" pages as IE7 this means that the pages are being rendered with an older (and MUCH SLOWER) JavaScript engine. So while the browser is capable of cutting edge performance it some time limits it self to much slower performance for the sake of backwards compatibility. If you want more information on this check out myself and Chris Jackson talk about this feature in my recent TechEd presentation [The Browser You Loved to Hate](<http://channel9.msdn.com/Events/TechEd/NewZealand/2013/WCL312> "http://channel9.msdn.com/Events/TechEd/NewZealand/2013/WCL312") To help address this performance issue and to make it easier for enterprise view internal website using newer rendering engines Microsoft has introduced an new option call Internet Explore Enterprise Mode. This gives administrators more configuration power over what web sites are configured using older and newer rendering engines.
+
+### How to enable Internet Explorer Enterprise Mode
+
+Internet Explorer Enterprise mode is not visible to the users out of the box. To enable this feature you need to enable the "Let users turn on and use Enterprise Mode from the Tools menu". [![image](https://www.grouppolicy.biz/wp-content/uploads/2014/04/image_thumb.png)](<https://www.grouppolicy.biz/wp-content/uploads/2014/04/image.png>) Once enabled user can toggle the "Enterprise Mode" option from the Internet Explorer menu. [![image](https://www.grouppolicy.biz/wp-content/uploads/2014/04/image_thumb1.png)](<https://www.grouppolicy.biz/wp-content/uploads/2014/04/image1.png>) But if the organisation want to specify the location of the Enterprise Mode IE List you can specify the path via the "Use the Enterprise Mode IE website list" group policy. [![image](https://www.grouppolicy.biz/wp-content/uploads/2014/04/image_thumb3.png)](<https://www.grouppolicy.biz/wp-content/uploads/2014/04/image3.png>) [![image](https://www.grouppolicy.biz/wp-content/uploads/2014/04/image_thumb4.png)](<https://www.grouppolicy.biz/wp-content/uploads/2014/04/image4.png>)
+
+### Update: Managing the Internet Explorer Enterprise Mode Site List
+
+The URL that you specify in the above mentioned setting is an XML tool called the [Enterprise Mode Site List Manager](<http://www.microsoft.com/en-us/download/details.aspx?id=42501>) (not yet available). This tool will allow you to create you own custom corporate XML file that allow you to granularly specify what web site to render in IE Enterprise Mode. [![Enterprise_Mode_Site_List_Manager](https://www.grouppolicy.biz/wp-content/uploads/2014/04/Enterprise_Mode_Site_List_Manager_thumb.png)](<https://www.grouppolicy.biz/wp-content/uploads/2014/04/Enterprise_Mode_Site_List_Manager.png>) Once you save the file you publish it to the URL configured via Group Policy and the user will pull down the updated compatibility view list. **Correction:** If you have downloading the EMSL tool you can use a text file to bulk import sites in the tool to generate the XML file. As the tools is not out yet you still need to hand craft the XML file.
+
+> microsoft.com, bing.com, bing.com/images
+
+or
+
+> microsoft.com bing.com bing.com/images
+
+Source: <http://blogs.msdn.com/b/ie/archive/2014/04/02/stay-up-to-date-with-enterprise-mode-for-internet-explorer-11.aspx> Source #2: <http://technet.microsoft.com/en-us/library/dn640696.aspx> Updated: Enterprise Mode Site List Manager Download  - <http://www.microsoft.com/en-us/download/details.aspx?id=42501>
