@@ -138,7 +138,7 @@ code{background:rgba(0,0,0,0.04);padding:2px 6px;border-radius:4px}
 .archive-year-link .count{font-size:0.95rem;color:var(--muted);font-weight:500}
 
 /* Main container */
-.main-container{max-width:1000px;margin:0 auto;padding:3rem 24px 4rem}
+.main-container{max-width:1100px;margin:0 auto;padding:3rem 24px 4rem}
 .main-container h1{font-size:2.5rem;margin-bottom:0.75rem;color:var(--accent-strong);font-weight:600;letter-spacing:-0.02em;line-height:1.2}
 .archive-count{color:var(--muted);font-size:1rem;margin-bottom:2.5rem;margin-top:0.5rem;font-weight:500}
 
