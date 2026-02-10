@@ -7,7 +7,12 @@
   // Load search index
   async function loadSearchIndex() {
     try {
-      const response = await fetch('/samples/sample-09-defender/search-index.json');
+      // Determine base path from current URL
+      // For GitHub Pages subdirectory deployment (e.g., /GroupPolicyBiz/)
+      const basePath = window.location.pathname.match(/^\/[^\/]+\//)?.[0] || '/';
+      const searchIndexUrl = `${basePath}search-index.json`.replace('//', '/');
+      
+      const response = await fetch(searchIndexUrl);
       searchIndex = await response.json();
       console.log(`Loaded ${searchIndex.length} posts for search`);
     } catch (error) {
