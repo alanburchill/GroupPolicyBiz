@@ -1,5 +1,6 @@
 # Generated site output
 _site/
+_site_test/
 
 # Python
 __pycache__/
