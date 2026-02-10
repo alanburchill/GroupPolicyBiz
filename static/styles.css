@@ -145,6 +145,10 @@ code{background:rgba(0,0,0,0.04);padding:2px 6px;border-radius:4px}
 /* Post page styles */
 .post-full{max-width:860px;margin:0 auto}
 .post-full header{margin-bottom:2rem}
+.post-header-content{display:flex;gap:2rem;align-items:flex-start}
+.post-header-text{flex:1;min-width:0}
+.post-header-image{flex-shrink:0;width:200px}
+.post-header-image img{width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
 .post-full h1{font-size:2.25rem;line-height:1.2;margin-bottom:0.75rem}
 .post-meta{display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap}
 .post-categories,.post-tags{display:flex;gap:0.5rem;flex-wrap:wrap}
@@ -185,6 +189,8 @@ code{background:rgba(0,0,0,0.04);padding:2px 6px;border-radius:4px}
   .main-container h1{font-size:2rem}
   .topbar .container{padding:16px 20px}
   .container{padding:0 20px}
+  .post-header-content{flex-direction:column}
+  .post-header-image{width:100%;max-width:400px;margin:0 auto}
 }
 
 /* Brand link */

@@ -401,11 +401,16 @@ def main():
   <div class="container main-container">
     <article class="post-full">
       <header>
-        <h1>{p['title']}</h1>
-        <p class="meta">{p['date']} • by {p['author']}</p>
-        <div class="post-meta">
-          {('<div class="post-categories">' + cats_html + '</div>') if cats_html else ''}
-          {('<div class="post-tags">' + tags_html + '</div>') if tags_html else ''}
+        <div class="post-header-content">
+          <div class="post-header-text">
+            <h1>{p['title']}</h1>
+            <p class="meta">{p['date']} • by {p['author']}</p>
+            <div class="post-meta">
+              {('<div class="post-categories">' + cats_html + '</div>') if cats_html else ''}
+              {('<div class="post-tags">' + tags_html + '</div>') if tags_html else ''}
+            </div>
+          </div>
+          {(f'<div class="post-header-image"><img src="{p["img"]}" alt="{p["title"]}" /></div>') if p.get('img') else ''}
         </div>
       </header>
       <div class="post-content">
