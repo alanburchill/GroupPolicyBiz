@@ -51,10 +51,10 @@ jobs:
         run: python scripts/generate_from_markdown.py --content content/posts --output _site --base-path /GroupPolicyBiz/
 
       - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
 
