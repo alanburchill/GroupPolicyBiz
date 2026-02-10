@@ -184,6 +184,23 @@ def main():
             if not metadata.get('title'):
                 continue
             
+            # Replace old WordPress image URLs with local paths
+            body = body.replace('http://www.grouppolicy.biz/wp-content/uploads/', '/uploads/')
+            body = body.replace('https://www.grouppolicy.biz/wp-content/uploads/', '/uploads/')
+            
+            # Extract featured image from metadata or first image in body
+            featured_img = metadata.get('featured_image')
+            if featured_img:
+                # Update featured image URL if it's from old site
+                featured_img = featured_img.replace('http://www.grouppolicy.biz/wp-content/uploads/', '/uploads/')
+                featured_img = featured_img.replace('https://www.grouppolicy.biz/wp-content/uploads/', '/uploads/')
+            else:
+                # Try to extract first image from body
+                import re
+                img_match = re.search(r'!\[.*?\]\((.*?)\)', body)
+                if img_match:
+                    featured_img = img_match.group(1)
+            
             # Convert markdown to HTML
             html_content = markdown_to_html(body)
             
@@ -208,7 +225,7 @@ def main():
                 'author': metadata.get('author', 'admin'),
                 'categories': metadata.get('categories', []),
                 'tags': metadata.get('tags', []),
-                'img': metadata.get('featured_image'),
+                'img': url(featured_img) if featured_img else None,
                 'html': html_content,
                 'url': url(f'/posts/{slug}/'),
                 'excerpt': body[:250].replace('\n', ' ').strip() + '...' if len(body) > 250 else body,
@@ -735,6 +752,15 @@ def main():
         src = Path('static') / asset
         if src.exists():
             shutil.copy2(src, output_dir / asset)
+    
+    # Copy uploads directory
+    uploads_src = Path('uploads')
+    if uploads_src.exists():
+        uploads_dest = output_dir / 'uploads'
+        if uploads_dest.exists():
+            shutil.rmtree(uploads_dest)
+        shutil.copytree(uploads_src, uploads_dest)
+        print(f'Copied uploads directory')
     
     # Generate about page with proper base path
     print('Generating about page...')
