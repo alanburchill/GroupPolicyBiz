@@ -52,18 +52,22 @@ def markdown_to_html(md_content):
     md = markdown.Markdown(extensions=['extra', 'codehilite', 'tables', 'fenced_code'])
     return md.convert(md_content)
 
-def generate_nav_html():
-    """Generate navigation HTML."""
-    return '''
+def generate_nav_html(url_func):
+    """Generate navigation HTML.
+    
+    Args:
+        url_func: Function to prepend base path to URLs
+    """
+    return f'''
     <nav class="main-nav">
-      <div class="nav-item"><a href="/">HOME</a></div>
-      <div class="nav-item"><a href="/news/">NEWS</a></div>
-      <div class="nav-item"><a href="/best-practices/">BEST PRACTICES</a></div>
-      <div class="nav-item"><a href="/tutorials/">TUTORIALS</a></div>
-      <div class="nav-item"><a href="/archives/">ARCHIVES</a></div>
-      <div class="nav-item"><a href="/categories/">CATEGORIES</a></div>
-      <div class="nav-item"><a href="/tags/">TAGS</a></div>
-      <div class="nav-item"><a href="/about/">ABOUT</a></div>
+      <div class="nav-item"><a href="{url_func('/')}">HOME</a></div>
+      <div class="nav-item"><a href="{url_func('/news/')}">NEWS</a></div>
+      <div class="nav-item"><a href="{url_func('/best-practices/')}">BEST PRACTICES</a></div>
+      <div class="nav-item"><a href="{url_func('/tutorials/')}">TUTORIALS</a></div>
+      <div class="nav-item"><a href="{url_func('/archives/')}">ARCHIVES</a></div>
+      <div class="nav-item"><a href="{url_func('/categories/')}">CATEGORIES</a></div>
+      <div class="nav-item"><a href="{url_func('/tags/')}">TAGS</a></div>
+      <div class="nav-item"><a href="{url_func('/about/')}">ABOUT</a></div>
     </nav>
     <div class="secondary-nav">
       <div class="container">
@@ -74,8 +78,15 @@ def generate_nav_html():
     </div>
     '''
 
-def generate_pagination_html(current_page, total_pages, base_url):
-    """Generate pagination HTML (WordPress-style)."""
+def generate_pagination_html(current_page, total_pages, base_url, url_func):
+    """Generate pagination HTML (WordPress-style).
+    
+    Args:
+        current_page: Current page number
+        total_pages: Total number of pages
+        base_url: Base URL for pagination (e.g., '/page/')
+        url_func: Function to prepend base path to URLs
+    """
     if total_pages <= 1:
         return ''
     
@@ -83,21 +94,21 @@ def generate_pagination_html(current_page, total_pages, base_url):
     
     # Previous link
     if current_page > 1:
-        prev_url = '/' if current_page == 2 else f'{base_url}{current_page - 1}/'
+        prev_url = url_func('/') if current_page == 2 else url_func(f'{base_url}{current_page - 1}/')
         links.append(f'<a href="{prev_url}" class="page-link prev">← Previous</a>')
     
     # Page numbers with ellipsis
     for i in range(1, total_pages + 1):
         if i == 1 or i == total_pages or (i >= current_page - 2 and i <= current_page + 2):
-            url = '/' if i == 1 else f'{base_url}{i}/'
+            page_url = url_func('/') if i == 1 else url_func(f'{base_url}{i}/')
             active = ' active' if i == current_page else ''
-            links.append(f'<a href="{url}" class="page-number{active}">{i}</a>')
+            links.append(f'<a href="{page_url}" class="page-number{active}">{i}</a>')
         elif i == current_page - 3 or i == current_page + 3:
             links.append('<span class="page-ellipsis">...</span>')
     
     # Next link
     if current_page < total_pages:
-        next_url = f'{base_url}{current_page + 1}/'
+        next_url = url_func(f'{base_url}{current_page + 1}/')
         links.append(f'<a href="{next_url}" class="page-link next">Next →</a>')
     
     return f'<div class="pagination">{"".join(links)}</div>'
@@ -107,7 +118,43 @@ def main():
     parser.add_argument('--content', default='content/posts', help='Directory containing Markdown files')
     parser.add_argument('--output', default='_site', help='Output directory for generated site')
     parser.add_argument('--per-page', type=int, default=12, help='Posts per page')
+    parser.add_argument('--base-path', default='/', help='Base path for GitHub Pages subdirectory deployment (e.g., "/" or "/GroupPolicyBiz/")')
     args = parser.parse_args()
+    
+    # Helper function to prepend base path to URLs
+    def url(path):
+        """Prepend base path to a given path, handling slashes correctly.
+        
+        Args:
+            path: The path to prepend base_path to (e.g., '/posts/', '/styles.css')
+        
+        Returns:
+            The full path with base_path prepended.
+        
+        Examples:
+            url('/posts/') with base_path='/' -> '/posts/'
+            url('/posts/') with base_path='/GroupPolicyBiz/' -> '/GroupPolicyBiz/posts/'
+        """
+        base = args.base_path
+        
+        # Normalize base_path: ensure it starts with / and ends with /
+        if not base.startswith('/'):
+            base = '/' + base
+        if not base.endswith('/'):
+            base = base + '/'
+        
+        # Normalize path: ensure it starts with /
+        if not path.startswith('/'):
+            path = '/' + path
+        
+        # If base_path is just '/', return path as-is
+        if base == '/':
+            return path
+        
+        # Remove leading slash from path since base already ends with /
+        path = path.lstrip('/')
+        
+        return base + path
     
     content_dir = Path(args.content)
     output_dir = Path(args.output)
@@ -161,7 +208,7 @@ def main():
                 'tags': metadata.get('tags', []),
                 'img': metadata.get('featured_image'),
                 'html': html_content,
-                'url': f'/posts/{slug}/',
+                'url': url(f'/posts/{slug}/'),
                 'excerpt': body[:250].replace('\n', ' ').strip() + '...' if len(body) > 250 else body,
                 # Link to the source markdown file on GitHub so readers can open a PR
                 'source': f"{repo_base}/{content_dir.as_posix()}/{md_file.name}"
@@ -192,7 +239,7 @@ def main():
             year = p['date'][:4]
             year_map[year].append(p)
     
-    nav_html = generate_nav_html()
+    nav_html = generate_nav_html(url)
     
     # Card template
     def card_template(p):
@@ -228,7 +275,7 @@ def main():
         page_posts = posts[start_idx:end_idx]
         
         cards_html = '\n'.join(card_template(p) for p in page_posts)
-        pagination_html = generate_pagination_html(page_num, total_pages, '/page/')
+        pagination_html = generate_pagination_html(page_num, total_pages, '/page/', url)
         
         # Archive notice only on first page
         archive_notice = ''
@@ -248,7 +295,7 @@ def main():
         <a href="https://github.com/alanburchill/GroupPolicyBiz" style="display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
           View on GitHub →
         </a>
-        <a href="/about/" style="display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+        <a href="{url('/about/')}" style="display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
           Learn More About This Archive
         </a>
       </div>
@@ -260,13 +307,13 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>GroupPolicy.biz — Page {page_num}</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="{url('/styles.css')}">
 </head>
 <body>
   <div class="topbar">
     <div class="container">
       <div class="brand-section">
-        <h1 class="site-title"><a href="/">Group Policy Central</a></h1>
+        <h1 class="site-title"><a href="{url('/')}">Group Policy Central</a></h1>
         <p class="site-tagline">News, Tips and Tutorials for all your Group Policy needs</p>
       </div>
       <div class="actions">
@@ -281,7 +328,7 @@ def main():
     <div class="cards">{cards_html}</div>
     {pagination_html}
   </div>
-  <script src="/search.js"></script>
+  <script src="{url('/search.js')}"></script>
 </body>
 </html>'''
         
@@ -317,13 +364,13 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{p['title']} — GroupPolicy.biz</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="{url('/styles.css')}">
 </head>
 <body>
   <div class="topbar">
     <div class="container">
       <div class="brand-section">
-        <h1 class="site-title"><a href="/">Group Policy Central</a></h1>
+        <h1 class="site-title"><a href="{url('/')}">Group Policy Central</a></h1>
         <p class="site-tagline">News, Tips and Tutorials for all your Group Policy needs</p>
       </div>
       <div class="actions">
@@ -348,7 +395,7 @@ def main():
       {edit_link_html}
     </article>
   </div>
-  <script src="/search.js"></script>
+  <script src="{url('/search.js')}"></script>
 </body>
 </html>'''
         (post_dir / 'index.html').write_text(post_html, encoding='utf-8')
@@ -366,8 +413,8 @@ def main():
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=/posts/{p['slug']}/">
-  <link rel="canonical" href="/posts/{p['slug']}/">
+  <meta http-equiv="refresh" content="0; url={url(f"/posts/{p['slug']}/")}">
+  <link rel="canonical" href="{url(f"/posts/{p['slug']}/")}">
   <title>Redirecting to {p['title']}</title>
   <style>
     body {{
@@ -393,7 +440,7 @@ def main():
 <body>
   <div class="container">
     <h1>Redirecting...</h1>
-    <p>If you are not redirected automatically, <a href="/posts/{p['slug']}/">click here</a>.</p>
+    <p>If you are not redirected automatically, <a href="{url(f"/posts/{p['slug']}/")}">click here</a>.</p>
   </div>
 </body>
 </html>'''
@@ -419,13 +466,13 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Category: {c} — GroupPolicy.biz</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="{url('/styles.css')}">
 </head>
 <body>
   <div class="topbar">
     <div class="container">
       <div class="brand-section">
-        <h1 class="site-title"><a href="/">Group Policy Central</a></h1>
+        <h1 class="site-title"><a href="{url('/')}">Group Policy Central</a></h1>
         <p class="site-tagline">News, Tips and Tutorials for all your Group Policy needs</p>
       </div>
       <div class="actions">
@@ -439,7 +486,7 @@ def main():
     <p class="archive-count">{len(items)} posts</p>
     <div class="compact-list">{compact_html}</div>
   </div>
-  <script src="/search.js"></script>
+  <script src="{url('/search.js')}"></script>
 </body>
 </html>'''
         
@@ -465,13 +512,13 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tag: {t} — GroupPolicy.biz</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="{url('/styles.css')}">
 </head>
 <body>
   <div class="topbar">
     <div class="container">
       <div class="brand-section">
-        <h1 class="site-title"><a href="/">Group Policy Central</a></h1>
+        <h1 class="site-title"><a href="{url('/')}">Group Policy Central</a></h1>
         <p class="site-tagline">News, Tips and Tutorials for all your Group Policy needs</p>
       </div>
       <div class="actions">
@@ -485,7 +532,7 @@ def main():
     <p class="archive-count">{len(items)} posts</p>
     <div class="compact-list">{compact_html}</div>
   </div>
-  <script src="/search.js"></script>
+  <script src="{url('/search.js')}"></script>
 </body>
 </html>'''
         (tag_out / slug / 'index.html').parent.mkdir(parents=True, exist_ok=True)
@@ -506,13 +553,13 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Archive: {year} — GroupPolicy.biz</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="{url('/styles.css')}">
 </head>
 <body>
   <div class="topbar">
     <div class="container">
       <div class="brand-section">
-        <h1 class="site-title"><a href="/">Group Policy Central</a></h1>
+        <h1 class="site-title"><a href="{url('/')}">Group Policy Central</a></h1>
         <p class="site-tagline">News, Tips and Tutorials for all your Group Policy needs</p>
       </div>
       <div class="actions">
@@ -526,7 +573,7 @@ def main():
     <p class="archive-count">{len(items)} posts</p>
     <div class="compact-list">{compact_html}</div>
   </div>
-  <script src="/search.js"></script>
+  <script src="{url('/search.js')}"></script>
 </body>
 </html>'''
         year_dir = archives_out / year
@@ -535,7 +582,7 @@ def main():
     
     # Generate archives landing page
     year_links_html = '\n'.join(
-        f'<div class="archive-year-link"><a href="/archives/{year}/"><span class="year">{year}</span><span class="count">{len(items)} posts</span></a></div>'
+        f'<div class="archive-year-link"><a href="{url(f"/archives/{year}/")}"><span class="year">{year}</span><span class="count">{len(items)} posts</span></a></div>'
         for year, items in sorted(year_map.items(), reverse=True)
     )
     
@@ -545,13 +592,13 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Archives — GroupPolicy.biz</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="{url('/styles.css')}">
 </head>
 <body>
   <div class="topbar">
     <div class="container">
       <div class="brand-section">
-        <h1 class="site-title"><a href="/">Group Policy Central</a></h1>
+        <h1 class="site-title"><a href="{url('/')}">Group Policy Central</a></h1>
         <p class="site-tagline">News, Tips and Tutorials for all your Group Policy needs</p>
       </div>
       <div class="actions">
@@ -565,7 +612,7 @@ def main():
     <p class="archive-count">Browse posts by year</p>
     <div class="archive-year-list">{year_links_html}</div>
   </div>
-  <script src="/search.js"></script>
+  <script src="{url('/search.js')}"></script>
 </body>
 </html>'''
     (archives_out / 'index.html').write_text(archives_landing, encoding='utf-8')
@@ -582,7 +629,7 @@ def main():
     }
     
     category_links_html = '\n'.join(
-        f'<div class="archive-year-link"><a href="{legacy_category_map.get(cat, "/category/" + re.sub(r"[^a-z0-9]+", "-", cat.lower()).strip("-") + "/")}"><span class="year">{cat}</span><span class="count">{len(items)} posts</span></a></div>'
+        f'<div class="archive-year-link"><a href="{url(legacy_category_map.get(cat, "/category/" + re.sub(r"[^a-z0-9]+", "-", cat.lower()).strip("-") + "/"))}"><span class="year">{cat}</span><span class="count">{len(items)} posts</span></a></div>'
         for cat, items in sorted(cats_map.items())
     )
     
@@ -592,13 +639,13 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Categories — GroupPolicy.biz</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="{url('/styles.css')}">
 </head>
 <body>
   <div class="topbar">
     <div class="container">
       <div class="brand-section">
-        <h1 class="site-title"><a href="/">Group Policy Central</a></h1>
+        <h1 class="site-title"><a href="{url('/')}">Group Policy Central</a></h1>
         <p class="site-tagline">News, Tips and Tutorials for all your Group Policy needs</p>
       </div>
       <div class="actions">
@@ -612,7 +659,7 @@ def main():
     <p class="archive-count">Browse posts by category</p>
     <div class="archive-year-list">{category_links_html}</div>
   </div>
-  <script src="/search.js"></script>
+  <script src="{url('/search.js')}"></script>
 </body>
 </html>'''
     (categories_dir / 'index.html').write_text(categories_landing, encoding='utf-8')
@@ -628,7 +675,7 @@ def main():
         count_range = max_count - min_count if max_count > min_count else 1
         
         tag_cloud_html = '\n'.join(
-            f'<a href="/tag/{re.sub(r"[^a-z0-9]+", "-", tag.lower()).strip("-")}/" class="tag-cloud-item" style="font-size: {0.8 + 1.2 * ((count - min_count) / count_range)}rem; padding: 0.25rem 0.6rem; margin: 0; line-height: 1.2; display: inline-block;" title="{count} posts">{tag}</a>'
+            f'<a href="{url("/tag/" + re.sub(r"[^a-z0-9]+", "-", tag.lower()).strip("-") + "/")}" class="tag-cloud-item" style="font-size: {0.8 + 1.2 * ((count - min_count) / count_range)}rem; padding: 0.25rem 0.6rem; margin: 0; line-height: 1.2; display: inline-block;" title="{count} posts">{tag}</a>'
             for tag, count in sorted(tag_counts, key=lambda x: x[0].lower())
         )
     else:
@@ -640,13 +687,13 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tags — GroupPolicy.biz</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="{url('/styles.css')}">
 </head>
 <body>
   <div class="topbar">
     <div class="container">
       <div class="brand-section">
-        <h1 class="site-title"><a href="/">Group Policy Central</a></h1>
+        <h1 class="site-title"><a href="{url('/')}">Group Policy Central</a></h1>
         <p class="site-tagline">News, Tips and Tutorials for all your Group Policy needs</p>
       </div>
       <div class="actions">
@@ -660,7 +707,7 @@ def main():
     <p class="archive-count" style="margin-bottom: 1rem;">Browse posts by tag - size indicates popularity</p>
     <div class="tag-cloud" style="line-height: 1.4; display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem;">{tag_cloud_html}</div>
   </div>
-  <script src="/search.js"></script>
+  <script src="{url('/search.js')}"></script>
 </body>
 </html>'''
     (tags_dir / 'index.html').write_text(tags_landing, encoding='utf-8')
