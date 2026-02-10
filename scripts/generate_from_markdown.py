@@ -60,14 +60,16 @@ def generate_nav_html(url_func):
     """
     return f'''
     <nav class="main-nav">
-      <div class="nav-item"><a href="{url_func('/')}">HOME</a></div>
-      <div class="nav-item"><a href="{url_func('/news/')}">NEWS</a></div>
-      <div class="nav-item"><a href="{url_func('/best-practices/')}">BEST PRACTICES</a></div>
-      <div class="nav-item"><a href="{url_func('/tutorials/')}">TUTORIALS</a></div>
-      <div class="nav-item"><a href="{url_func('/archives/')}">ARCHIVES</a></div>
-      <div class="nav-item"><a href="{url_func('/categories/')}">CATEGORIES</a></div>
-      <div class="nav-item"><a href="{url_func('/tags/')}">TAGS</a></div>
-      <div class="nav-item"><a href="{url_func('/about/')}">ABOUT</a></div>
+      <div class="container">
+        <div class="nav-item"><a href="{url_func('/')}">HOME</a></div>
+        <div class="nav-item"><a href="{url_func('/news/')}">NEWS</a></div>
+        <div class="nav-item"><a href="{url_func('/best-practices/')}">BEST PRACTICES</a></div>
+        <div class="nav-item"><a href="{url_func('/tutorials/')}">TUTORIALS</a></div>
+        <div class="nav-item"><a href="{url_func('/archives/')}">ARCHIVES</a></div>
+        <div class="nav-item"><a href="{url_func('/categories/')}">CATEGORIES</a></div>
+        <div class="nav-item"><a href="{url_func('/tags/')}">TAGS</a></div>
+        <div class="nav-item"><a href="{url_func('/about/')}">ABOUT</a></div>
+      </div>
     </nav>
     <div class="secondary-nav">
       <div class="container">

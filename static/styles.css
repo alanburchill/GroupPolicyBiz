@@ -30,7 +30,7 @@ body{font-family:Segoe UI, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvet
 .container{max-width:1100px;margin:0 auto;padding:0 24px}
 /* Blue header banner */
 .topbar{background:linear-gradient(135deg, #0078d4 0%, #0063b1 100%);border-bottom:none;margin-bottom:0}
-.topbar .container{display:flex;align-items:center;justify-content:space-between;padding:24px 32px}
+.topbar .container{display:flex;align-items:center;justify-content:space-between;padding:24px 24px}
 .brand-section{flex:1}
 .site-title{margin:0;font-size:2.25rem;font-weight:700;line-height:1}
 .site-title a{color:#fff;text-decoration:none;text-shadow:0 1px 2px rgba(0,0,0,0.15)}
@@ -73,7 +73,7 @@ code{background:rgba(0,0,0,0.04);padding:2px 6px;border-radius:4px}
 
 /* Main navigation bar - Black horizontal menu */
 .main-nav{background:#2b2b2b;border-bottom:2px solid rgba(0,0,0,0.3);padding:0;margin:0;position:sticky;top:0;z-index:1000;box-shadow:0 2px 4px rgba(0,0,0,0.15)}
-.main-nav{display:flex;align-items:center;justify-content:center;gap:0;padding:0}
+.main-nav .container{display:flex;align-items:center;justify-content:flex-start;gap:0;padding:0 24px}
 .main-nav .nav-item{position:relative;display:flex;align-items:center}
 .main-nav .nav-item a{display:block;padding:14px 18px;color:#fff;text-decoration:none;font-weight:600;transition:background 0.15s;white-space:nowrap;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.03em}
 .main-nav .nav-item a:hover{background:rgba(255,255,255,0.1);color:#fff}
