@@ -216,19 +216,3 @@ code{background:rgba(0,0,0,0.04);padding:2px 6px;border-radius:4px}
   color:var(--text);
   transform:scale(1.05);
 }
-
-/* Edit-on-GitHub link styling */
-.repo-edit{
-  margin-top:1.5rem;
-  font-size:0.95rem;
-  border-top:1px solid rgba(0,0,0,0.06);
-  padding-top:0.75rem;
-}
-.repo-edit a{color:var(--accent);text-decoration:none;font-weight:600}
-.repo-edit a:hover{text-decoration:underline}
-
-/* Footer link for index pages */
-.repo-footer{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(0,0,0,0.06);text-align:center;font-size:0.95rem}
-.repo-footer a{color:var(--accent);text-decoration:none;font-weight:600}
-.repo-footer a:hover{text-decoration:underline}
-

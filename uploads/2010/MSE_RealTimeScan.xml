@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RegistrySettings clsid="{A3CCFC41-DFDB-43a5-8D26-0FE8B954DA51}"><Registry clsid="{9CD4B2F4-923D-47f5-A062-E897DD1DAD50}" name="DisableIOAVProtection" status="DisableIOAVProtection" image="12" changed="2010-09-24 02:32:51" uid="{17216AB8-DD4C-419E-AB8C-E515F136B9D6}"><Properties action="U" displayDecimal="0" default="0" hive="HKEY_LOCAL_MACHINE" key="Software\Microsoft\Microsoft Antimalware\Scan" name="DisableIOAVProtection" type="REG_DWORD" value="00000000"/></Registry>
+	<Registry clsid="{9CD4B2F4-923D-47f5-A062-E897DD1DAD50}" name="DisableOnAccessProtection" status="DisableOnAccessProtection" image="12" changed="2010-09-24 02:32:59" uid="{8C6501C7-9C54-470A-A029-2C07EFA13434}"><Properties action="U" displayDecimal="0" default="0" hive="HKEY_LOCAL_MACHINE" key="Software\Microsoft\Microsoft Antimalware\Scan" name="DisableOnAccessProtection" type="REG_DWORD" value="00000000"/></Registry>
+</RegistrySettings>
