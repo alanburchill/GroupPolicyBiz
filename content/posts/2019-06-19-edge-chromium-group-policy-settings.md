@@ -4,6 +4,7 @@ date: 2019-06-19 23:00:17
 author: admin
 categories: ["News", "Tip"]
 tags: ["ADMX", "Chromium", "Group Policy", "IE Enterprise Mode", "Mac", "Windows 7"]
+featured_image: "/uploads/2019/06/EdgeGPOSettingSmall.png"
 ---
 
 For all of its issues, Internet Explorer has been the most prolific Group Policy enabled applications ever released. Even the recent versions of Edge with Windows 10 still does not hold up to the old versions of IE when it comes to sheer number of supported settings. This rightly or wrongly gave Group Policy administrators a near infinite of ways to configure the browser.

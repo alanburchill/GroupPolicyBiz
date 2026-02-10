@@ -4,6 +4,7 @@ date: 2017-10-24 05:53:46
 author: admin
 categories: ["News", "Uncategorized"]
 tags: ["1709", "GPMC", "Remote Server Admin Tools", "Security Baseline", "Windows 10"]
+featured_image: "/uploads/2017/06/img0_1366x768-Copy.jpg"
 ---
 
 Windows 10 a.k.a. Redstone 3, a.k.a. 1709 a.k.a. Fall Creators Update has now been released to the public for download. If you would like to get a copy of the new version early to start testing you can download the PRO version using the Windows 10 ISO/USB download tool at <https://www.microsoft.com/en-au/software-download/windows10> . Alternatively, you can download the images from your MSDN or Volume licencing web site. Now normally, with any release of Windows 10 I would go though the new list of Group Policy features. But in this new version of Windows 10 there is no new major (or minor) Group Policy engine changes. This meaning that the delivery mechanism of Group Policy has not changed. But of course, there are many new settings that come with every new version of Windows. So for your easy reference, below is a list of essential reference for any Group Policy Administrator:

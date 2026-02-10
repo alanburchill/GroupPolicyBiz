@@ -3,6 +3,7 @@ title: "Security Baseline Recommendation for Windows 10 1809"
 date: 2018-11-21 02:55:04
 author: admin
 categories: ["News", "Security"]
+featured_image: "/uploads/2017/03/Icons31_thumb.png"
 ---
 
 After its initial release and then withdrawal of Windows 10 1809 update due to a number of potential data loss issues, Microsoft has now again released the OS to wide scale deployment. As a such a number of other release have now come from Microsoft, namely the Security Baseline templates GPO's, documentation with recommended guidance and scripts to help secure your OS.

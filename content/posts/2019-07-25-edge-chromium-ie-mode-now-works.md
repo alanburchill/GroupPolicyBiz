@@ -4,6 +4,7 @@ date: 2019-07-25 01:17:05
 author: admin
 categories: ["News", "Tip"]
 tags: ["Chromium", "Edge", "Enterprise", "IE Mode", "Internet Explorer 11"]
+featured_image: "/uploads/2019/07/Edge-Logo.png"
 ---
 
 In the past few weeks there has been a lot of post about the new Enterprise features coming with the new Edge Chromium version of the browser. Unfortunately the main feature that enterprises were waiting for did not work... until today.

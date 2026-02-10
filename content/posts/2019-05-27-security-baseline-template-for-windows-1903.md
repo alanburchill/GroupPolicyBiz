@@ -4,6 +4,7 @@ date: 2019-05-27 00:40:18
 author: admin
 categories: ["News", "Security"]
 tags: ["1903", "Maximum Password Age", "Password", "Policy", "Security Template", "Windows 10", "Windows Server"]
+featured_image: "/uploads/2017/03/Icons31.png"
 ---
 
 Microsoft has released the latest security template for Windows version (Windows 10 and Windows Server) 1903. These templates contain updated guidance and recommendations as to what setting should or should not be configured to your domain joined PC. The security template is actually just a bunch of reports, documents, GPO backups and tools that are consolidated in a s single ZIP file. They are released with every new version of the OS, which ensure that they are also kept up to date with the latest guidance. If you are using Azure AD joined computer the templates are also published via the MDM admin portal.

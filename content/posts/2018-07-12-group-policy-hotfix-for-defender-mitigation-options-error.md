@@ -4,6 +4,7 @@ date: 2018-07-12 07:54:00
 author: admin
 categories: ["KB Focus"]
 tags: ["Defender", "hotfix", "KB4338819", "Mitigation Option"]
+featured_image: "/uploads/2018/05/RSAT_Package.png"
 ---
 
 Just a quick note that Microsoft has recently release a hot fix KB4338819 that fixes and issue with the Mitigation option. This is a Windows Defender setting that can be found under the Administrative Templates>Computers>System>Mitigation Options setting. The fix is described as:

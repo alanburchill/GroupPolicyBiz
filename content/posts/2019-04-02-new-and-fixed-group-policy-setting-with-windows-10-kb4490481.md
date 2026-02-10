@@ -4,6 +4,7 @@ date: 2019-04-02 22:32:38
 author: admin
 categories: ["News"]
 tags: ["hotfix", "Soft-Disconnect", "Windows 10"]
+featured_image: "/uploads/2019/04/Lan.png"
 ---
 
 Microsoft has just released a new rollout KB hotfix for Windows 10 on the 1st April (not joking). What is notable about this update is there is a couple of Group Policy settings that have been fixed and added.

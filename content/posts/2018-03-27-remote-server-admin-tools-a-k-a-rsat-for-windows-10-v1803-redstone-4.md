@@ -4,6 +4,7 @@ date: 2018-03-27 23:11:55
 author: admin
 categories: ["News"]
 tags: ["1803", "Honolulu", "Redstone 4", "Remote Server Admin Tools", "RSAT"]
+featured_image: "/uploads/2016/06/Icons8.png"
 ---
 
 Microsoft has release a new version of the Windows 10 Remote Server Admin Tools for builds of Windows 10 17110 or higher. While it was normally practice for Microsoft to release a new RSAT version with every release of a Windows client OS in recent years they have been releasing these tools less frequently (see <https://www.grouppolicy.biz/2017/04/microsoft-will-not-be-releasing-remote-server-admin-tools-rsat-for-windows-10-redstone-2/> ) While it does not seem like there is much in this new version I still always recommend that admin run the latest version of RSAT on their computer to ensure the least amount of problem, especially with Group Policy Management Console. What's new:
