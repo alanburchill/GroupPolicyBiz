@@ -280,7 +280,7 @@ def main():
         # Archive notice only on first page
         archive_notice = ''
         if page_num == 1:
-            archive_notice = '''
+            archive_notice = f'''
     <div class="archive-notice" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
       <h2 style="margin-top: 0; font-size: 1.75rem; margin-bottom: 1rem;">📚 Archive Notice</h2>
       <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1rem;">
