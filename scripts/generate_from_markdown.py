@@ -121,6 +121,7 @@ def main():
     parser.add_argument('--output', default='_site', help='Output directory for generated site')
     parser.add_argument('--per-page', type=int, default=12, help='Posts per page')
     parser.add_argument('--base-path', default='/', help='Base path for GitHub Pages subdirectory deployment (e.g., "/" or "/GroupPolicyBiz/")')
+    parser.add_argument('--ga-id', default='', help='Google Analytics tracking ID (e.g., G-XXXXXXXXXX or UA-XXXXXXXXX-X)')
     args = parser.parse_args()
     
     # Helper function to prepend base path to URLs
@@ -157,6 +158,35 @@ def main():
         path = path.lstrip('/')
         
         return base + path
+    
+    # Generate Google Analytics tracking code
+    def ga_tracking_script():
+        """Generate Google Analytics tracking script if GA ID is provided."""
+        if not args.ga_id:
+            return ''
+        
+        # Detect if it's GA4 (G-) or Universal Analytics (UA-)
+        if args.ga_id.startswith('G-'):
+            # Google Analytics 4 (GA4)
+            return f'''<!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={args.ga_id}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', '{args.ga_id}');
+  </script>'''
+        elif args.ga_id.startswith('UA-'):
+            # Universal Analytics (legacy)
+            return f'''<!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/analytics.js"></script>
+  <script>
+    window.ga=window.ga||function(){{(ga.q=ga.q||[]).push(arguments)}};ga.l=+new Date;
+    ga('create', '{args.ga_id}', 'auto');
+    ga('send', 'pageview');
+  </script>'''
+        else:
+            return ''
     
     content_dir = Path(args.content)
     output_dir = Path(args.output)
@@ -327,6 +357,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>GroupPolicy.biz — Page {page_num}</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -384,6 +415,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{p['title']} — GroupPolicy.biz</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -491,6 +523,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Category: {c} — GroupPolicy.biz</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -537,6 +570,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tag: {t} — GroupPolicy.biz</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -578,6 +612,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Archive: {year} — GroupPolicy.biz</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -617,6 +652,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Archives — GroupPolicy.biz</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -664,6 +700,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Categories — GroupPolicy.biz</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -712,6 +749,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tags — GroupPolicy.biz</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -781,6 +819,7 @@ def main():
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>About & Privacy Policy — GroupPolicy.biz</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
+  {ga_tracking_script()}
 </head>
 <body>
   <div class="topbar">
@@ -870,6 +909,105 @@ def main():
 </html>'''
     
     (about_dir / 'index.html').write_text(about_html, encoding='utf-8')
+    
+    # Generate sitemap.xml
+    print('Generating sitemap.xml...')
+    
+    # Determine the base domain
+    # For GitHub Pages: https://alanburchill.github.io (without path, since url() adds it)
+    base_domain = 'https://alanburchill.github.io'
+    
+    sitemap_urls = []
+    
+    # Homepage (highest priority)
+    sitemap_urls.append({
+        'loc': f'{base_domain}{url("/")}',
+        'lastmod': datetime.now().strftime('%Y-%m-%d'),
+        'changefreq': 'weekly',
+        'priority': '1.0'
+    })
+    
+    # All individual posts
+    for p in posts:
+        sitemap_urls.append({
+            'loc': f'{base_domain}{p["url"]}',
+            'lastmod': p['date'][:10] if p['date'] else datetime.now().strftime('%Y-%m-%d'),
+            'changefreq': 'monthly',
+            'priority': '0.8'
+        })
+    
+    # Category pages
+    for c in cats_map.keys():
+        slug = re.sub(r'[^a-z0-9]+', '-', c.lower()).strip('-')
+        if c in legacy_category_map:
+            cat_url = legacy_category_map[c]
+        else:
+            cat_url = f'/category/{slug}/'
+        sitemap_urls.append({
+            'loc': f'{base_domain}{url(cat_url)}',
+            'lastmod': datetime.now().strftime('%Y-%m-%d'),
+            'changefreq': 'weekly',
+            'priority': '0.6'
+        })
+    
+    # Tag pages
+    for t in tags_map.keys():
+        slug = re.sub(r'[^a-z0-9]+', '-', t.lower()).strip('-')
+        sitemap_urls.append({
+            'loc': f'{base_domain}{url(f"/tag/{slug}/")}',
+            'lastmod': datetime.now().strftime('%Y-%m-%d'),
+            'changefreq': 'monthly',
+            'priority': '0.5'
+        })
+    
+    # Year archive pages
+    for year in year_map.keys():
+        sitemap_urls.append({
+            'loc': f'{base_domain}{url(f"/archives/{year}/")}',
+            'lastmod': datetime.now().strftime('%Y-%m-%d'),
+            'changefreq': 'monthly',
+            'priority': '0.5'
+        })
+    
+    # Main archive, categories, tags, and about pages
+    for page_url, priority in [
+        ('/archives/', '0.7'),
+        ('/categories/', '0.7'),
+        ('/tags/', '0.7'),
+        ('/about/', '0.6')
+    ]:
+        sitemap_urls.append({
+            'loc': f'{base_domain}{url(page_url)}',
+            'lastmod': datetime.now().strftime('%Y-%m-%d'),
+            'changefreq': 'weekly',
+            'priority': priority
+        })
+    
+    # Paginated index pages
+    for page_num in range(2, total_pages + 1):
+        sitemap_urls.append({
+            'loc': f'{base_domain}{url(f"/page/{page_num}/")}',
+            'lastmod': datetime.now().strftime('%Y-%m-%d'),
+            'changefreq': 'weekly',
+            'priority': '0.5'
+        })
+    
+    # Build XML sitemap
+    sitemap_xml = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+'''
+    for url_entry in sitemap_urls:
+        sitemap_xml += f'''  <url>
+    <loc>{url_entry['loc']}</loc>
+    <lastmod>{url_entry['lastmod']}</lastmod>
+    <changefreq>{url_entry['changefreq']}</changefreq>
+    <priority>{url_entry['priority']}</priority>
+  </url>
+'''
+    sitemap_xml += '</urlset>\n'
+    
+    (output_dir / 'sitemap.xml').write_text(sitemap_xml, encoding='utf-8')
+    print(f'Generated sitemap.xml with {len(sitemap_urls)} URLs')
     
     print(f'\nGenerated {len(posts)} posts across {total_pages} pages')
     print(f'Generated {len(cats_map)} category pages')

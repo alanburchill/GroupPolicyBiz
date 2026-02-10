@@ -48,7 +48,11 @@ jobs:
         run: python -m pip install --upgrade pip && pip install -r requirements.txt
 
       - name: Generate site
-        run: python scripts/generate_from_markdown.py --content content/posts --output _site --base-path /GroupPolicyBiz/
+        run: |
+          # Optional: Add Google Analytics tracking ID
+          # Use --ga-id G-XXXXXXXXXX (GA4) or --ga-id UA-XXXXXXXXX-X (Universal Analytics)
+          # Example: python scripts/generate_from_markdown.py --content content/posts --output _site --base-path /GroupPolicyBiz/ --ga-id ${{ secrets.GA_TRACKING_ID }}
+          python scripts/generate_from_markdown.py --content content/posts --output _site --base-path /GroupPolicyBiz/
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
