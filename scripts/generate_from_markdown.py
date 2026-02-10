@@ -288,6 +288,13 @@ def main():
             year = p['date'][:4]
             year_map[year].append(p)
     
+    # Map category names to legacy URLs (used for links and category pages)
+    legacy_category_map = {
+        'News': '/news/',
+        'Best Practice': '/best-practices/',
+        'Tutorials': '/tutorials/'
+    }
+    
     nav_html = generate_nav_html(url)
     
     # Card template
@@ -399,8 +406,15 @@ def main():
         post_dir = posts_out / p['slug']
         post_dir.mkdir(parents=True, exist_ok=True)
         
-        tags_html = ' '.join(f'<span class="tag-badge">{t}</span>' for t in p['tags'][:10])
-        cats_html = ' '.join(f'<span class="category-badge">{c}</span>' for c in p['categories'])
+        # Create clickable tag and category links
+        tags_html = ' '.join(
+            f'<a href="{url("/tag/" + re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-") + "/")}" class="tag-badge">{t}</a>'
+            for t in p['tags'][:10]
+        )
+        cats_html = ' '.join(
+            f'<a href="{url(legacy_category_map.get(c, "/category/" + re.sub(r"[^a-z0-9]+", "-", c.lower()).strip("-") + "/"))}" class="category-badge">{c}</a>'
+            for c in p['categories']
+        )
         
         # Add an "Edit on GitHub" link at the bottom of the post so readers can open PRs
         edit_link_html = f'''<div class="repo-edit" style="margin-top:1.5rem; font-size:0.95rem;
@@ -505,13 +519,6 @@ def main():
     # Generate category pages
     print(f'Generating {len(cats_map)} category pages...')
     
-    # Map category names to legacy URLs
-    legacy_category_map = {
-        'News': 'news',
-        'Best Practice': 'best-practices',
-        'Tutorials': 'tutorials'
-    }
-    
     for c, items in cats_map.items():
         slug = re.sub(r'[^a-z0-9]+','-', c.lower()).strip('-')
         compact_html = '\n'.join(compact_list_template(p) for p in items)
@@ -549,7 +556,9 @@ def main():
         
         # Use legacy URL for specific categories, otherwise use /category/ prefix
         if c in legacy_category_map:
-            category_dir = output_dir / legacy_category_map[c]
+            # Strip leading/trailing slashes from legacy path for directory creation
+            legacy_path = legacy_category_map[c].strip('/')
+            category_dir = output_dir / legacy_path
             category_dir.mkdir(parents=True, exist_ok=True)
             (category_dir / 'index.html').write_text(page, encoding='utf-8')
         else:
@@ -680,13 +689,6 @@ def main():
     # Generate categories landing page
     categories_dir = output_dir / 'categories'
     categories_dir.mkdir(exist_ok=True)
-    
-    # Map categories to their URLs (legacy URLs for main categories)
-    legacy_category_map = {
-        'News': '/news/',
-        'Best Practice': '/best-practices/',
-        'Tutorials': '/tutorials/'
-    }
     
     category_links_html = '\n'.join(
         f'<div class="archive-year-link"><a href="{url(legacy_category_map.get(cat, "/category/" + re.sub(r"[^a-z0-9]+", "-", cat.lower()).strip("-") + "/"))}"><span class="year">{cat}</span><span class="count">{len(items)} posts</span></a></div>'
@@ -913,15 +915,16 @@ def main():
     # Generate sitemap.xml
     print('Generating sitemap.xml...')
     
-    # Determine the base domain
-    # For GitHub Pages: https://alanburchill.github.io (without path, since url() adds it)
-    base_domain = 'https://alanburchill.github.io'
+    # Use relative URLs so sitemap works with both subdirectory deployment and custom domains
+    # The url() function already adds the base-path, giving us paths like:
+    # - /GroupPolicyBiz/posts/slug/ (when base-path=/GroupPolicyBiz/)
+    # - /posts/slug/ (when base-path=/)
     
     sitemap_urls = []
     
     # Homepage (highest priority)
     sitemap_urls.append({
-        'loc': f'{base_domain}{url("/")}',
+        'loc': url("/"),
         'lastmod': datetime.now().strftime('%Y-%m-%d'),
         'changefreq': 'weekly',
         'priority': '1.0'
@@ -930,7 +933,7 @@ def main():
     # All individual posts
     for p in posts:
         sitemap_urls.append({
-            'loc': f'{base_domain}{p["url"]}',
+            'loc': p["url"],
             'lastmod': p['date'][:10] if p['date'] else datetime.now().strftime('%Y-%m-%d'),
             'changefreq': 'monthly',
             'priority': '0.8'
@@ -944,7 +947,7 @@ def main():
         else:
             cat_url = f'/category/{slug}/'
         sitemap_urls.append({
-            'loc': f'{base_domain}{url(cat_url)}',
+            'loc': url(cat_url),
             'lastmod': datetime.now().strftime('%Y-%m-%d'),
             'changefreq': 'weekly',
             'priority': '0.6'
@@ -954,7 +957,7 @@ def main():
     for t in tags_map.keys():
         slug = re.sub(r'[^a-z0-9]+', '-', t.lower()).strip('-')
         sitemap_urls.append({
-            'loc': f'{base_domain}{url(f"/tag/{slug}/")}',
+            'loc': url(f"/tag/{slug}/"),
             'lastmod': datetime.now().strftime('%Y-%m-%d'),
             'changefreq': 'monthly',
             'priority': '0.5'
@@ -963,7 +966,7 @@ def main():
     # Year archive pages
     for year in year_map.keys():
         sitemap_urls.append({
-            'loc': f'{base_domain}{url(f"/archives/{year}/")}',
+            'loc': url(f"/archives/{year}/"),
             'lastmod': datetime.now().strftime('%Y-%m-%d'),
             'changefreq': 'monthly',
             'priority': '0.5'
@@ -977,7 +980,7 @@ def main():
         ('/about/', '0.6')
     ]:
         sitemap_urls.append({
-            'loc': f'{base_domain}{url(page_url)}',
+            'loc': url(page_url),
             'lastmod': datetime.now().strftime('%Y-%m-%d'),
             'changefreq': 'weekly',
             'priority': priority
@@ -986,7 +989,7 @@ def main():
     # Paginated index pages
     for page_num in range(2, total_pages + 1):
         sitemap_urls.append({
-            'loc': f'{base_domain}{url(f"/page/{page_num}/")}',
+            'loc': url(f"/page/{page_num}/"),
             'lastmod': datetime.now().strftime('%Y-%m-%d'),
             'changefreq': 'weekly',
             'priority': '0.5'
