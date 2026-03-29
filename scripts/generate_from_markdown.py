@@ -600,12 +600,18 @@ def main():
       </div>
     </div>'''
         
+        page_title = (
+            'Group Policy Central - News, Tips and Tutorials for all your Group Policy needs'
+            if page_num == 1
+            else f'GroupPolicy.biz — Page {page_num}'
+        )
+
         page_html = f'''<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>GroupPolicy.biz — Page {page_num}</title>
+  <title>{page_title}</title>
   <link rel="stylesheet" href="{url('/styles.css')}">
   {head_extras_html}
 </head>
