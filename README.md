@@ -73,26 +73,19 @@ Example: `2019-07-25-edge-chromium-ie-mode-now-works.md`
 This project supports both:
 
 - GitHub Pages project deployment: `https://alanburchill.github.io/GroupPolicyBiz/`
-- Custom-domain deployment: `https://www.grouppolicy.biz/`
+- Custom-domain deployment: `https://grouppolicy.biz/`
 
-Copy the example configuration and adjust it for your target environment:
-
-```bash
-copy .env.example .env
-```
-
-Current GitHub Pages project-site values:
-
-```env
-SITE_BASE_PATH=/GroupPolicyBiz/
-SITE_URL=https://alanburchill.github.io
-```
-
-When switching to the custom domain, use:
+The repository now tracks a shared `.env` with the default production-style custom-domain settings:
 
 ```env
 SITE_BASE_PATH=/
-SITE_URL=https://www.grouppolicy.biz
+SITE_URL=https://grouppolicy.biz
+```
+
+For GitHub Pages project-site preview builds, override the defaults at build time:
+
+```bash
+python scripts/generate_from_markdown.py --content content/posts --output _site_project_preview --base-path /GroupPolicyBiz/ --site-url https://alanburchill.github.io
 ```
 
 ### Generate Site Locally
@@ -101,12 +94,14 @@ SITE_URL=https://www.grouppolicy.biz
 # Install dependencies
 pip install -r requirements.txt
 
-# Generate the GitHub Pages-style build
+# Generate the default production-style build
 python scripts/generate_from_markdown.py --content content/posts --output _site
 
-# Serve locally (this build expects /GroupPolicyBiz/ paths)
+# Serve locally
 python -m http.server 8000 --directory _site
 ```
+
+If you specifically want to test the GitHub Pages project-site URL shape, use the explicit overrides shown above.
 
 ### Localhost debug build
 
@@ -125,7 +120,7 @@ Then open `http://127.0.0.1:8001/` in your browser.
 ├── .github/
 │   └── workflows/
 │       └── deploy-pages.yml        # GitHub Actions workflow
-├── .env.example                    # Example local/site configuration
+├── .env                            # Shared local/site configuration defaults
 ├── content/
 │   └── posts/                      # Markdown source files (424 posts)
 │       ├── 2019-07-25-post-1.md
@@ -170,18 +165,18 @@ The workflow:
 2. Set **Source** to "GitHub Actions"
 3. Go to **Settings** → **Secrets and variables** → **Actions** → **Variables**
 4. Add the following repository variables:
-   - `SITE_BASE_PATH=/GroupPolicyBiz/`
-   - `SITE_URL=https://alanburchill.github.io`
-5. Your site will be available at: `https://alanburchill.github.io/GroupPolicyBiz/`
+   - `SITE_BASE_PATH=/`
+   - `SITE_URL=https://grouppolicy.biz`
+5. Your site will be available at: `https://grouppolicy.biz/`
 
 ### Switching to the custom domain
 
-When you are ready to move to `https://www.grouppolicy.biz/`, update the GitHub Actions variables to:
+If you need to temporarily switch back to the GitHub Pages project-site URL shape, update the GitHub Actions variables to:
 
-- `SITE_BASE_PATH=/`
-- `SITE_URL=https://www.grouppolicy.biz`
+- `SITE_BASE_PATH=/GroupPolicyBiz/`
+- `SITE_URL=https://alanburchill.github.io`
 
-You should also add a `CNAME` file for the custom domain as part of the cutover.
+With a GitHub Actions Pages workflow, manage the custom domain in **Settings → Pages** rather than relying on a committed `CNAME` file.
 
 ## ✨ Site Features
 
