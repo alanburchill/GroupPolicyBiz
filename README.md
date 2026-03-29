@@ -119,25 +119,6 @@ python -m http.server 8001 --directory _site_local
 
 Then open `http://127.0.0.1:8001/` in your browser.
 
-### HTTP alignment check against production
-
-After generating `_site_local` and serving it on `http://127.0.0.1:8001`, you can compare the local site and the live site with real HTTP requests:
-
-```bash
-python scripts/check_http_alignment.py --local-base http://127.0.0.1:8001 --live-base https://www.grouppolicy.biz
-```
-
-This writes:
-
-- `docs/http-alignment-report.md` — human-readable mismatch summary
-- `docs/http-alignment-results.json` — full machine-readable results
-
-If you want the command to fail whenever any route is not aligned, add:
-
-```bash
-python scripts/check_http_alignment.py --local-base http://127.0.0.1:8001 --live-base https://www.grouppolicy.biz --fail-on-mismatch
-```
-
 ## Repository Structure
 
 ```
