@@ -987,7 +987,7 @@ def main():
     
     # Copy static assets
     print('Copying static assets...')
-    for asset in ['styles.css', 'search.js']:
+    for asset in ['styles.css', 'search.js', 'robots.txt']:
         src = Path('static') / asset
         if src.exists():
             shutil.copy2(src, output_dir / asset)

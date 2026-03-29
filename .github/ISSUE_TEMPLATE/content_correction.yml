@@ -1,0 +1,45 @@
+name: Content correction
+description: Suggest a factual correction, clarification, or archive note for an article
+labels:
+  - content
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to report factual errors, outdated notes that need context, or article-specific fixes.
+
+        Because this repository is an archive, please focus on corrections, clarifications, and modern context rather than rewriting history.
+  - type: input
+    id: article
+    attributes:
+      label: Article URL or file path
+      placeholder: https://www.grouppolicy.biz/2018/07/example/ or content/posts/2018/07/example.md
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What needs correction?
+      placeholder: The registry path in the example is missing the Policies key.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested_fix
+    attributes:
+      label: Suggested correction or note
+      placeholder: Replace ... with ... or add a note explaining the modern equivalent.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Supporting references
+      description: Link Microsoft docs, KB articles, or other authoritative sources if possible
+      placeholder: https://learn.microsoft.com/...
+  - type: checkboxes
+    id: archive_ack
+    attributes:
+      label: Archive acknowledgment
+      options:
+        - label: I understand this repository preserves historical content, and my suggestion is intended to improve accuracy or add context rather than erase the original record.
+          required: true

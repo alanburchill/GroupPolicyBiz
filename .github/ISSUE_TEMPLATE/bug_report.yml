@@ -1,0 +1,75 @@
+name: Bug report
+description: Report a site, build, or rendering problem in GroupPolicy.biz
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the GroupPolicy.biz archive.
+
+        Please use this form for site bugs, broken behavior, incorrect rendering, or build problems.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: Short description of the problem
+      placeholder: Search results do not load on tag pages
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Live site
+        - Local build
+        - GitHub Actions workflow
+        - Markdown content rendering
+        - Search
+        - Styles / layout
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Affected page or file
+      description: Paste a URL or repository path if relevant
+      placeholder: https://www.grouppolicy.biz/2019/07/example/ or content/posts/2019/07/example.md
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Tell us how to trigger the issue
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: The page should load the search results without errors.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: The page stays blank and the browser console shows ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, device, or Python version if this is a build issue
+      placeholder: Windows 11, Edge 135, Python 3.12
+  - type: textarea
+    id: notes
+    attributes:
+      label: Extra context
+      description: Screenshots, logs, or anything else that helps

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and general discussion
+    url: https://github.com/alanburchill/GroupPolicyBiz/discussions
+    about: Ask questions, propose broader ideas, or discuss archive and site direction.
+  - name: Security policy
+    url: https://github.com/alanburchill/GroupPolicyBiz/security/policy
+    about: Read how to report a security issue privately.
