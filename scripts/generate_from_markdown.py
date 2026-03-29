@@ -206,6 +206,13 @@ def markdown_source_repo_path(md_file: Path) -> str:
   except ValueError:
     return md_file.name
 
+def load_optional_html_include(include_path: Path) -> str:
+  """Load an optional HTML include file, returning an empty string if absent."""
+  if not include_path.exists():
+    return ''
+
+  return include_path.read_text(encoding='utf-8').strip()
+
 def main():
     parser = argparse.ArgumentParser(description='Generate static site from Markdown files')
     parser.add_argument('--content', default='content/posts', help='Directory containing Markdown files (supports nested YYYY/MM/*.md layouts)')
@@ -308,7 +315,8 @@ def main():
         'siteUrl': configured_site_url,
     })
     head_extras_html = f'<script>window.__SITE_CONFIG__ = {site_config_json};</script>'
-    ga_script_html = ga_tracking_script()
+    ga_include_html = load_optional_html_include(Path('static/includes/google-analytics.html'))
+    ga_script_html = ga_include_html or ga_tracking_script()
     if ga_script_html:
         head_extras_html += f'\n  {ga_script_html}'
     
@@ -1063,17 +1071,20 @@ def main():
         <hr style="margin: 3rem 0; border: none; border-top: 1px solid var(--border);">
         
         <h2 id="privacy-policy">Privacy Policy</h2>
-        <p><em>Last Updated: February 10, 2026</em></p>
+        <p><em>Last Updated: March 30, 2026</em></p>
         
         <h3>Information Collection</h3>
-        <p>This is a static archive website. We do not collect, store, or process any personal information from visitors. This site does not use:</p>
+        <p>This is a static archive website. It does not provide user accounts, comments, or contact forms, but it does use Google Analytics 4 to collect aggregate traffic and engagement information.</p>
         <ul>
-          <li>Cookies or tracking technologies</li>
-          <li>Analytics services</li>
           <li>User accounts or registration</li>
-          <li>Forms or data submission</li>
+          <li>Public comment submissions or community posting</li>
+          <li>Contact or feedback forms</li>
           <li>Third-party advertising networks</li>
         </ul>
+
+        <h3>Analytics</h3>
+        <p>This site uses Google Analytics 4 to understand aggregate usage patterns such as page views, approximate geography, device/browser information, and page engagement. Google may use cookies or similar technologies to provide these reports.</p>
+        <p>The Google Analytics measurement ID included in the site code is public by design and is not considered a secret.</p>
         
         <h3>Content</h3>
         <p>All content on this site is provided for informational and educational purposes only. The information is based on historical blog posts about Windows Group Policy and may not reflect current best practices or software versions.</p>
@@ -1082,7 +1093,7 @@ def main():
         <p>This site may contain links to external websites, including Microsoft documentation and other resources. We are not responsible for the privacy practices or content of external sites.</p>
         
         <h3>Local Storage</h3>
-        <p>This site uses browser local storage only to save your theme preference (light/dark mode) on your device. This data never leaves your browser and is not transmitted to any server.</p>
+        <p>This site uses browser local storage to save your theme preference (light/dark mode) on your device. This preference data stays in your browser. Separately, Google Analytics may place its own cookies or similar identifiers as part of its measurement service.</p>
         
         <h3>Copyright</h3>
         <p>Content on this site is provided as-is from archived blog posts. Windows, Group Policy, Active Directory, and related trademarks are property of Microsoft Corporation.</p>
