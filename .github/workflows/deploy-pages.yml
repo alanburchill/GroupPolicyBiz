@@ -30,6 +30,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: github-pages
+    env:
+      SITE_BASE_PATH: ${{ vars.SITE_BASE_PATH }}
+      SITE_URL: ${{ vars.SITE_URL }}
     steps:
       - uses: actions/checkout@v4
 
@@ -52,7 +55,7 @@ jobs:
           # Optional: Add Google Analytics tracking ID
           # Use --ga-id G-XXXXXXXXXX (GA4) or --ga-id UA-XXXXXXXXX-X (Universal Analytics)
           # Example: python scripts/generate_from_markdown.py --content content/posts --output _site --base-path /GroupPolicyBiz/ --ga-id ${{ secrets.GA_TRACKING_ID }}
-          python scripts/generate_from_markdown.py --content content/posts --output _site --base-path /GroupPolicyBiz/
+          python scripts/generate_from_markdown.py --content content/posts --output _site --base-path "${SITE_BASE_PATH:-/GroupPolicyBiz/}" --site-url "${SITE_URL:-https://alanburchill.github.io}"
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3

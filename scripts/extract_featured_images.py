@@ -53,8 +53,9 @@ def extract_featured_images_from_xml(xml_path):
 def update_markdown_files(featured_images, content_dir):
     """Update markdown files with featured_image in front matter."""
     updated_count = 0
+    content_root = Path(content_dir)
     
-    for md_file in Path(content_dir).glob('*.md'):
+    for md_file in content_root.rglob('*.md'):
         # Extract slug from filename (YYYY-MM-DD-slug.md)
         filename = md_file.stem
         parts = filename.split('-', 3)
@@ -71,17 +72,17 @@ def update_markdown_files(featured_images, content_dir):
         
         # Check if it already has featured_image
         if 'featured_image:' in content:
-            print(f"Skipping {md_file.name} - already has featured_image")
+            print(f"Skipping {md_file.relative_to(content_root).as_posix()} - already has featured_image")
             continue
         
         # Parse front matter
         if not content.startswith('---'):
-            print(f"Skipping {md_file.name} - no front matter")
+            print(f"Skipping {md_file.relative_to(content_root).as_posix()} - no front matter")
             continue
         
         parts = content.split('---', 2)
         if len(parts) < 3:
-            print(f"Skipping {md_file.name} - invalid front matter")
+            print(f"Skipping {md_file.relative_to(content_root).as_posix()} - invalid front matter")
             continue
         
         front_matter = parts[1].strip()
@@ -101,7 +102,7 @@ def update_markdown_files(featured_images, content_dir):
         
         # Write back
         md_file.write_text(new_content, encoding='utf-8')
-        print(f"Updated {md_file.name} with featured image: {image_url}")
+        print(f"Updated {md_file.relative_to(content_root).as_posix()} with featured image: {image_url}")
         updated_count += 1
     
     return updated_count

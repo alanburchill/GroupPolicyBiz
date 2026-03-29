@@ -1,6 +1,6 @@
 # Generated site output
 _site/
-_site_test/
+_site_*/
 
 # Python
 __pycache__/
@@ -8,6 +8,12 @@ __pycache__/
 *.class
 *.so
 .Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
 env/
 venv/
 .venv/
@@ -15,6 +21,11 @@ ENV/
 *.egg-info/
 dist/
 build/
+
+# Local environment files
+.env
+.env.*
+!.env.example
 
 # IDE
 .vscode/
@@ -36,12 +47,19 @@ Thumbs.db
 *.sanitized.xml
 content/posts_backup*/
 content/posts_old*/
+encoding_todo.md
 
 # Local private markdown files (not public)
 private_md/
+docs/
+references/recent-mistakes.md
 
 # Local tools and utilities (not public)
 tools/
+
+# One-off content cleanup helpers
+scripts/fix_encoding_artifacts.py
+scripts/scan_encoding_issues.py
 
 # WordPress export files (large XML files)
 grouppolicycentral*.xml

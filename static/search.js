@@ -3,14 +3,38 @@
   let searchIndex = [];
   let searchInput = null;
   let searchResults = null;
+
+  function normalizeBasePath(basePath) {
+    if (!basePath || basePath === '/') {
+      return '/';
+    }
+
+    let normalized = basePath.trim();
+    if (!normalized.startsWith('/')) {
+      normalized = `/${normalized}`;
+    }
+    if (!normalized.endsWith('/')) {
+      normalized = `${normalized}/`;
+    }
+
+    return normalized;
+  }
+
+  function getSiteConfig() {
+    const config = window.__SITE_CONFIG__ || {};
+    const fallbackBasePath = window.location.pathname.match(/^\/[^\/]+\//)?.[0] || '/';
+
+    return {
+      basePath: normalizeBasePath(config.basePath || fallbackBasePath),
+      siteUrl: config.siteUrl || ''
+    };
+  }
   
   // Load search index
   async function loadSearchIndex() {
     try {
-      // Determine base path from current URL
-      // For GitHub Pages subdirectory deployment (e.g., /GroupPolicyBiz/)
-      const basePath = window.location.pathname.match(/^\/[^\/]+\//)?.[0] || '/';
-      const searchIndexUrl = `${basePath}search-index.json`.replace('//', '/');
+      const { basePath } = getSiteConfig();
+      const searchIndexUrl = `${basePath}search-index.json`;
       
       const response = await fetch(searchIndexUrl);
       searchIndex = await response.json();

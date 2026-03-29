@@ -98,16 +98,16 @@ def main():
         print(f'Error: Directory not found: {content_dir}')
         return
     
-    print(f'Scanning Markdown files in {content_dir}...\n')
+    print(f'Scanning Markdown files recursively in {content_dir}...\n')
     
-    md_files = list(content_dir.glob('*.md'))
+    md_files = sorted(content_dir.rglob('*.md'))
     fixed_count = 0
     
     for md_file in md_files:
         if process_file(md_file):
             fixed_count += 1
             if fixed_count <= 10:  # Show first 10
-                print(f'Fixed: {md_file.name}')
+                print(f'Fixed: {md_file.relative_to(content_dir).as_posix()}')
     
     if fixed_count > 10:
         print(f'... and {fixed_count - 10} more files')

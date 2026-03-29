@@ -1,6 +1,6 @@
 # 🌐 GroupPolicy.biz - Source Repository
 
-**Welcome!** This is the official source repository for [www.grouppolicy.biz](https://www.grouppolicy.biz), a comprehensive archive of Windows Group Policy knowledge spanning from 2009 to 2026.
+**Welcome!** This is the official source repository for [www.grouppolicy.biz](https://www.grouppolicy.biz), a comprehensive archive of Windows Group Policy knowledge spanning from 2009 to 2019.
 
 ## 📖 About This Site
 
@@ -16,7 +16,7 @@ This repository contains all the source Markdown files, scripts, and assets that
 ## 🎯 What's Inside
 
 - **Content**: 424 blog posts converted from WordPress to Markdown
-- **Timeframe**: July 2009 - January 2026
+- **Timeframe**: May 2009 - July 2019
 - **Topics**: Group Policy, Active Directory, Windows Server, Security, AGPM, PowerShell
 - **Images**: 16+ years of screenshots, diagrams, and examples
 - **Format**: Clean, searchable Markdown with proper formatting
@@ -66,32 +66,85 @@ Example: `2019-07-25-edge-chromium-ie-mode-now-works.md`
 ### Prerequisites
 
 - Python 3.11+
-- pip packages: `beautifulsoup4`, `lxml`, `html2text`, `requests`, `markdown`, `pyyaml`
+- pip packages from `requirements.txt`
+
+### Environment configuration
+
+This project supports both:
+
+- GitHub Pages project deployment: `https://alanburchill.github.io/GroupPolicyBiz/`
+- Custom-domain deployment: `https://www.grouppolicy.biz/`
+
+Copy the example configuration and adjust it for your target environment:
+
+```bash
+copy .env.example .env
+```
+
+Current GitHub Pages project-site values:
+
+```env
+SITE_BASE_PATH=/GroupPolicyBiz/
+SITE_URL=https://alanburchill.github.io
+```
+
+When switching to the custom domain, use:
+
+```env
+SITE_BASE_PATH=/
+SITE_URL=https://www.grouppolicy.biz
+```
 
 ### Generate Site Locally
 
 ```bash
 # Install dependencies
-pip install beautifulsoup4 lxml html2text requests markdown pyyaml
+pip install -r requirements.txt
 
-# Generate site from Markdown files
-python scripts/generate_from_markdown.py \
-  --content content/posts \
-  --output _site \
-  --per-page 12
+# Generate the GitHub Pages-style build
+python scripts/generate_from_markdown.py --content content/posts --output _site
 
-# Serve locally (requires Python 3)
+# Serve locally (this build expects /GroupPolicyBiz/ paths)
 python -m http.server 8000 --directory _site
 ```
 
-Then open http://localhost:8000 in your browser.
+### Localhost debug build
+
+For local browser debugging, generate a root-based build so assets and navigation work correctly from `http://127.0.0.1`:
+
+```bash
+python scripts/generate_from_markdown.py --content content/posts --output _site_local --base-path / --site-url http://127.0.0.1:8001
+python -m http.server 8001 --directory _site_local
+```
+
+Then open `http://127.0.0.1:8001/` in your browser.
+
+### HTTP alignment check against production
+
+After generating `_site_local` and serving it on `http://127.0.0.1:8001`, you can compare the local site and the live site with real HTTP requests:
+
+```bash
+python scripts/check_http_alignment.py --local-base http://127.0.0.1:8001 --live-base https://www.grouppolicy.biz
+```
+
+This writes:
+
+- `docs/http-alignment-report.md` — human-readable mismatch summary
+- `docs/http-alignment-results.json` — full machine-readable results
+
+If you want the command to fail whenever any route is not aligned, add:
+
+```bash
+python scripts/check_http_alignment.py --local-base http://127.0.0.1:8001 --live-base https://www.grouppolicy.biz --fail-on-mismatch
+```
 
 ## Repository Structure
 
 ```
 ├── .github/
 │   └── workflows/
-│       └── build-deploy.yml        # GitHub Actions workflow
+│       └── deploy-pages.yml        # GitHub Actions workflow
+├── .env.example                    # Example local/site configuration
 ├── content/
 │   └── posts/                      # Markdown source files (424 posts)
 │       ├── 2019-07-25-post-1.md
@@ -107,7 +160,7 @@ Then open http://localhost:8000 in your browser.
 │   └── ...
 ├── scripts/
 │   └── generate_from_markdown.py   # Site generator (Markdown → HTML)
-└── _site/                      # Generated static site (not in Git)
+└── _site/                          # Generated static site (not in Git)
     ├── index.html
     ├── posts/
     ├── category/
@@ -119,21 +172,35 @@ Then open http://localhost:8000 in your browser.
 The site automatically rebuilds and deploys when:
 
 - You push changes to the `main` branch
-- Someone's Pull Request is merged
+- A Pull Request is opened or updated
 - Files in `content/` or `scripts/` are modified
 
 The workflow:
 1. Checks out the repository
 2. Sets up Python 3.11
 3. Installs dependencies
-4. Runs the static site generator
-5. Deploys to GitHub Pages
+4. Applies `SITE_BASE_PATH` and `SITE_URL` from GitHub Actions variables
+5. Runs the static site generator
+6. Deploys to GitHub Pages
 
 ## GitHub Pages Setup
 
 1. Go to **Settings** → **Pages**
 2. Set **Source** to "GitHub Actions"
-3. Your site will be available at: `https://alanburchill.github.io/GroupPolicyBiz/`
+3. Go to **Settings** → **Secrets and variables** → **Actions** → **Variables**
+4. Add the following repository variables:
+   - `SITE_BASE_PATH=/GroupPolicyBiz/`
+   - `SITE_URL=https://alanburchill.github.io`
+5. Your site will be available at: `https://alanburchill.github.io/GroupPolicyBiz/`
+
+### Switching to the custom domain
+
+When you are ready to move to `https://www.grouppolicy.biz/`, update the GitHub Actions variables to:
+
+- `SITE_BASE_PATH=/`
+- `SITE_URL=https://www.grouppolicy.biz`
+
+You should also add a `CNAME` file for the custom domain as part of the cutover.
 
 ## ✨ Site Features
 
@@ -142,7 +209,7 @@ The generated static site includes:
 - 🔍 **Full-text search** across all 424 posts
 - 🏷️ **509 tags** for granular topic filtering
 - 📁 **19 categories** for browsing by subject
-- 📅 **Year archives** (2009-2026)
+- 📅 **Year archives** (2009-2019)
 - 🔗 **Legacy URL redirects** maintaining original WordPress paths
 - 🌓 **Dark mode support** for comfortable reading
 - 📱 **Mobile responsive** design
@@ -178,8 +245,9 @@ Before making this repository publicly discoverable, please review and complete 
 4. Verify there are no large binary files tracked in Git
    - Use `git ls-files` and `git rev-list` to find large files; remove or replace with links if necessary.
 5. Run content QA checks
-   - Run the site generator locally and browse the generated site at `_site/` to check links and navigation.
-   - Use `tools/check_sitemap_coverage.py` to ensure legacy URLs map correctly.
+   - Run the site generator locally and browse the generated site at `_site_local/` to check links and navigation.
+   - Use `_site/` when you specifically want to verify the GitHub Pages project-path build.
+   - Spot-check a sample of legacy URLs and redirects after each significant content or generator change.
 6. Add repository metadata and governance files
    - Add `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` if you plan to accept external contributions.
 7. Audit `.gitignore` and local excludes
@@ -187,7 +255,8 @@ Before making this repository publicly discoverable, please review and complete 
 8. Add attribution and disclaimers
    - Explicitly note trademarks, and include a short disclaimer about archived content being provided "as-is".
 9. Final testing
-   - Run `python scripts/generate_from_markdown.py --content content/posts --output _site --per-page 12` and spot-check posts and images.
+   - Run `python scripts/generate_from_markdown.py --content content/posts --output _site` and spot-check the GitHub Pages build.
+   - Run `python scripts/generate_from_markdown.py --content content/posts --output _site_local --base-path / --site-url http://127.0.0.1:8001` for localhost browser testing.
 
 
 ## 📜 License
