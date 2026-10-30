@@ -9,6 +9,7 @@ Cloudflare Pages settings for the intended project:
 - Framework preset: none; root directory: repository root.
 - Build command: `python -m pip install -r requirements-cloudflare.txt && python scripts/build_docs_preview.py --output _cloudflare_site --site-url https://grouppolicy-central-staging.pages.dev`
 - Build output directory: `_cloudflare_site`.
+- Environment variables: `PYTHON_VERSION=3.14.7` and `SKIP_DEPENDENCY_INSTALL=1`. The build command installs the pinned staging requirements explicitly.
 - Enable automatic production builds on every push to `main`; disable branch preview builds unless explicitly needed.
 
 The command builds the Markdown archive, checks the generated post inventory, applies the documentation theme, suppresses the existing Google Analytics include and creates an `_headers` file that asks search engines not to index the staging site. A Pages default URL is publicly accessible: noindex is not access control. This staging artifact is approximately 428 MB and contains the public site's full uploaded media archive.
