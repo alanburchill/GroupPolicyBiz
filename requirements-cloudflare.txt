@@ -1,0 +1,5 @@
+# Versions used for the validated local documentation build.
+beautifulsoup4==4.15.0
+Markdown==3.11.2
+soupsieve==3.0.4
+typing_extensions==4.16.0
