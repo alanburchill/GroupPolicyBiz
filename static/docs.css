@@ -1,4 +1,5 @@
 /* Documentation preview theme. Historical content and media remain unchanged. */
+.docs-sidebar .search-results-dropdown{position:static;width:100%;max-height:min(50vh,400px);margin-top:4px;overflow-y:auto;overflow-wrap:anywhere}
 :root{color-scheme:light;--ink:#172c40;--muted:#5f6e7e;--accent:#0067b8;--line:#dce3e9;--surface:#f6f8fa}
 *{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.6}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #77baff;outline-offset:2px}
 .docs-header{height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 32px;gap:20px;position:sticky;top:0;background:#fff;z-index:5}.docs-brand{font-size:20px;font-weight:700;letter-spacing:-.6px;color:#12314a;white-space:nowrap}.docs-brand span{color:#0876bd}.header-divider{width:1px;height:25px;background:#d4dce2}.header-label{font-weight:600;color:#465a6b}.header-github{margin-left:auto;font-size:14px;font-weight:600}.menu-toggle{display:none}
@@ -69,6 +70,7 @@ html[data-docs-theme="dark"] .post-content pre code{color:#e4edf5;background:tra
 html[data-docs-theme="dark"] .post-card h3 a,html[data-docs-theme="dark"] .compact-post h3 a,html[data-docs-theme="dark"] .post-content a,html[data-docs-theme="dark"] .repo-edit a{color:#8dccff}
 html[data-docs-theme="dark"] .pagination a.page-link{color:#102a3d;background:#8dccff;border-color:#8dccff}
 html[data-docs-theme="dark"] .search-results-dropdown{background:#1b2c38;border-color:#8297a6}html[data-docs-theme="dark"] .search-result-item{background:#1b2c38;color:#e4edf5}html[data-docs-theme="dark"] .search-result-item:hover{background:#29475b}
+html[data-docs-theme="dark"] .search-result-title{color:#b9e0ff}html[data-docs-theme="dark"] .search-result-footer{background:#1b2c38;color:#b9c9d7}
 html[data-docs-theme="dark"] a:focus-visible,html[data-docs-theme="dark"] button:focus-visible,html[data-docs-theme="dark"] input:focus-visible{outline-color:#9cd4ff}
 @media(max-width:700px){.docs-theme-toggle{margin-left:auto}.menu-toggle{margin-left:0}.docs-theme-toggle+.header-github{display:none}}
 @media(max-width:420px){.docs-header{gap:8px;padding-inline:12px}.docs-brand{font-size:16px;letter-spacing:-.4px}.docs-theme-toggle,.menu-toggle{font-size:12px;padding:7px 8px}}
