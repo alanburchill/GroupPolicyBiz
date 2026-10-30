@@ -78,10 +78,13 @@ html[data-docs-theme="dark"] a:focus-visible,html[data-docs-theme="dark"] button
 
 /* Keep theme changes coordinated, including surfaces that use gradients. */
 ::view-transition-old(root),::view-transition-new(root){animation-duration:240ms;animation-timing-function:ease}
-@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) and (forced-colors:none){
   .quick-links a{transition:transform 240ms cubic-bezier(.23,1,.32,1),border-color 240ms ease,box-shadow 240ms ease,background-color 240ms ease}
   .docs-sidebar nav a,.search-result-item,.docs-theme-toggle,.menu-toggle{transition:background-color 220ms ease,color 220ms ease,border-color 220ms ease,box-shadow 220ms ease}
-  .primary-action{transition:background-color 220ms ease,box-shadow 220ms ease,color 220ms ease}
+  .primary-action{transition:filter 220ms ease,box-shadow 220ms ease,color 220ms ease}
+  html[data-docs-theme="light"] .primary-action:hover{background:linear-gradient(110deg,#005a9e,#0067b8);filter:brightness(.9)}
+  html[data-docs-theme="dark"] .primary-action:hover{background:#8dccff;filter:brightness(1.12)}
+  html[data-docs-theme="dark"] .quick-links a:hover{background:linear-gradient(145deg,#243a49,#1b2c38);box-shadow:0 6px 18px #0006}
   .docs-theme-toggle:hover,.menu-toggle:hover{box-shadow:0 2px 8px #193f5b30}
 }
 @media (prefers-reduced-motion:reduce){
