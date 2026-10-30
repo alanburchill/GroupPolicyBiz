@@ -14,9 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
   applyTheme();
   systemTheme.addEventListener('change', () => { if (!preference) applyTheme(); });
   if (themeButton) themeButton.addEventListener('click', () => {
-    preference = document.documentElement.dataset.docsTheme === 'dark' ? 'light' : 'dark';
+    const current = preference || document.documentElement.dataset.docsTheme;
+    preference = current === 'dark' ? 'light' : 'dark';
     try { localStorage.setItem('group-policy-docs-theme', preference); } catch (_) {}
-    applyTheme();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const forcedColors = window.matchMedia('(forced-colors: active)').matches;
+    if (!reduceMotion && !forcedColors && typeof document.startViewTransition === 'function') {
+      // Cross-fade complete theme snapshots so text and its background change together.
+      document.startViewTransition(applyTheme).finished.catch(() => {});
+    } else {
+      applyTheme();
+    }
   });
   const toggle = document.querySelector('.menu-toggle');
   const sidebar = document.querySelector('.docs-sidebar');
