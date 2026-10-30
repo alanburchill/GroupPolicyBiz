@@ -35,6 +35,9 @@ def main():
     index = json.loads((output / 'search-index.json').read_text(encoding='utf-8'))
     if len(index) != source_count:
         raise RuntimeError(f'Generated {len(index)} posts from {source_count} Markdown files')
+    urls = [post['url'] for post in index]
+    if len(set(urls)) != len(urls):
+        raise RuntimeError('Duplicate post URLs in generated search index')
     for post in index:
         if not (output / post['url'].lstrip('/') / 'index.html').is_file():
             raise RuntimeError(f'Missing generated post: {post["url"]}')
