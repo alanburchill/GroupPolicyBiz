@@ -75,3 +75,16 @@ html[data-docs-theme="dark"] a:focus-visible,html[data-docs-theme="dark"] button
 @media(max-width:700px){.docs-theme-toggle{margin-left:auto}.menu-toggle{margin-left:0}.docs-theme-toggle+.header-github{display:none}}
 @media(max-width:420px){.docs-header{gap:8px;padding-inline:12px}.docs-brand{font-size:16px;letter-spacing:-.4px}.docs-theme-toggle,.menu-toggle{font-size:12px;padding:7px 8px}}
 @media(forced-colors:active){html[data-docs-theme="dark"] body,html[data-docs-theme="dark"] .docs-header,html[data-docs-theme="dark"] .docs-sidebar,html[data-docs-theme="dark"] .docs-hero,html[data-docs-theme="dark"] .quick-links a{background:Canvas;color:CanvasText;box-shadow:none}html[data-docs-theme="dark"] a,html[data-docs-theme="dark"] .docs-brand,html[data-docs-theme="dark"] .docs-sidebar nav a{color:LinkText}html[data-docs-theme="dark"] .docs-hero h1,html[data-docs-theme="dark"] .docs-hero p,html[data-docs-theme="dark"] .quick-links small{color:CanvasText}}
+
+/* Keep theme changes coordinated, including surfaces that use gradients. */
+::view-transition-old(root),::view-transition-new(root){animation-duration:240ms;animation-timing-function:ease}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  .quick-links a{transition:transform 240ms cubic-bezier(.23,1,.32,1),border-color 240ms ease,box-shadow 240ms ease,background-color 240ms ease}
+  .docs-sidebar nav a,.search-result-item,.docs-theme-toggle,.menu-toggle{transition:background-color 220ms ease,color 220ms ease,border-color 220ms ease,box-shadow 220ms ease}
+  .primary-action{transition:background-color 220ms ease,box-shadow 220ms ease,color 220ms ease}
+  .docs-theme-toggle:hover,.menu-toggle:hover{box-shadow:0 2px 8px #193f5b30}
+}
+@media (prefers-reduced-motion:reduce){
+  .quick-links a,.docs-sidebar nav a,.search-result-item,.docs-theme-toggle,.menu-toggle,.primary-action{transition:none}
+  ::view-transition-old(root),::view-transition-new(root){animation-duration:0s}
+}
