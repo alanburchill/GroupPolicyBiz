@@ -19,10 +19,14 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--site-url', default='http://127.0.0.1:8002',
                         help='Origin for canonical URLs and sitemap')
+    parser.add_argument('--production', action='store_true',
+                        help='Build an indexable artifact for the public domain (does not deploy it)')
     args = parser.parse_args()
     origin = urlsplit(args.site_url)
     if origin.scheme not in ('http', 'https') or not origin.netloc or origin.path not in ('', '/') or origin.query or origin.fragment:
         parser.error('--site-url must be an HTTP(S) origin without a path, query or fragment')
+    if args.production and args.site_url.rstrip('/') != 'https://grouppolicy.biz':
+        parser.error('--production requires the public origin https://grouppolicy.biz')
     output = args.output.resolve()
     if output.exists() and any(output.iterdir()):
         parser.error('Output must be an empty directory')
@@ -41,8 +45,11 @@ def main():
     for post in index:
         if not (output / post['url'].lstrip('/') / 'index.html').is_file():
             raise RuntimeError(f'Missing generated post: {post["url"]}')
-    # This deployment is an isolated staging site, not a DNS cutover.
-    (output / '_headers').write_text('/*\n  X-Robots-Tag: noindex, nofollow\n', encoding='utf-8')
+    # Staging is never indexable by default; production must be selected explicitly.
+    if not args.production:
+        (output / '_headers').write_text('/*\n  X-Robots-Tag: noindex, nofollow\n', encoding='utf-8')
+    # Cloudflare Pages otherwise treats unknown paths as an SPA and serves the homepage.
+    (output / '404.html').write_text('''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page not found — Group Policy Central</title></head><body><main><h1>Page not found</h1><p>We could not find that page.</p><p><a href="/">Return to Group Policy Central</a></p></main></body></html>''', encoding='utf-8')
     (output / 'docs.css').write_text((ROOT / 'static/docs.css').read_text(encoding='utf-8'), encoding='utf-8')
     (output / 'docs.js').write_text((ROOT / 'static/docs.js').read_text(encoding='utf-8'), encoding='utf-8')
     count = 0
@@ -56,8 +63,9 @@ def main():
                 tag.decompose()
         style = soup.new_tag('link', rel='stylesheet', href='/docs.css')
         soup.head.append(style)
-        meta = soup.new_tag('meta', attrs={'name': 'robots', 'content': 'noindex, nofollow'})
-        soup.head.append(meta)
+        if not args.production:
+            meta = soup.new_tag('meta', attrs={'name': 'robots', 'content': 'noindex, nofollow'})
+            soup.head.append(meta)
         top = soup.select_one('.topbar')
         nav = soup.select_one('.main-nav')
         secondary = soup.select_one('.secondary-nav')
