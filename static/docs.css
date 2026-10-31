@@ -1,5 +1,4 @@
 /* Documentation preview theme. Historical content and media remain unchanged. */
-.docs-sidebar .search-results-dropdown{position:static;width:100%;max-height:min(50vh,400px);margin-top:4px;overflow-y:auto;overflow-wrap:anywhere}
 :root{color-scheme:light;--ink:#172c40;--muted:#5f6e7e;--accent:#0067b8;--line:#dce3e9;--surface:#f6f8fa}
 *{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.6}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #77baff;outline-offset:2px}
 .docs-header{height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 32px;gap:20px;position:sticky;top:0;background:#fff;z-index:5}.docs-brand{font-size:20px;font-weight:700;letter-spacing:-.6px;color:#12314a;white-space:nowrap}.docs-brand span{color:#0876bd}.header-divider{width:1px;height:25px;background:#d4dce2}.header-label{font-weight:600;color:#465a6b}.header-github{margin-left:auto;font-size:14px;font-weight:600}.menu-toggle{display:none}
@@ -91,3 +90,21 @@ html[data-docs-theme="dark"] a:focus-visible,html[data-docs-theme="dark"] button
   .quick-links a,.docs-sidebar nav a,.search-result-item,.docs-theme-toggle,.menu-toggle,.primary-action{transition:none}
   ::view-transition-old(root),::view-transition-new(root){animation-duration:0s}
 }
+
+/* Archive search stays visible and its results have room to be read. */
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.docs-search-box{flex:1 1 300px;max-width:460px;min-width:150px;margin-left:auto}
+.docs-search-box input{display:block;width:100%;padding:9px 12px;border:1px solid #9aafbe;border-radius:4px;background:#fff;color:#172c40;font:inherit;line-height:1.4}
+.docs-header .search-results-dropdown{top:calc(100% + 6px);left:0;right:auto;width:100%;max-height:min(60vh,500px);overflow-y:auto;overflow-wrap:anywhere;text-align:left}
+.docs-header .docs-theme-toggle{margin-left:0}
+.docs-header .search-result-item:focus-visible{outline:3px solid #005a9e;outline-offset:-3px}
+html[data-docs-theme="dark"] .docs-search-box input{background:#192b38;border-color:#8297a6;color:#eef6fc}
+html[data-docs-theme="dark"] .docs-search-box input::placeholder{color:#b9c9d7}
+html[data-docs-theme="dark"] .docs-header .search-result-item:focus-visible{outline-color:#9cd4ff}
+@media(max-width:700px){
+  .docs-header{height:112px;flex-wrap:wrap;align-content:center;row-gap:8px;padding-block:8px}
+  .docs-search-box{order:2;flex:0 0 100%;max-width:none;margin:0}
+  .docs-sidebar{top:112px;height:calc(100vh - 112px)}
+}
+@media(max-width:420px){.menu-toggle span{display:none}}
+@media(forced-colors:active){.docs-search-box input,.docs-header .search-results-dropdown{background:Canvas;color:CanvasText;border:1px solid CanvasText}}
