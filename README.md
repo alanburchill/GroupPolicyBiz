@@ -11,7 +11,7 @@ Source for [Group Policy Central](https://grouppolicy.biz/), an independent arch
 
 The staging project is not the public domain and DNS has not been cut over. Branch preview deployments are disabled. Pull requests run a build-only validation job; they do not deploy the GitHub Pages site. The GitHub Pages production job runs on qualifying pushes to `main`. See [Cloudflare staging and cutover notes](CLOUDFLARE-STAGING.md) before changing the build command, custom domain or DNS.
 
-The current public build includes Google Analytics. The documentation-style builder removes that include in both staging and production mode; Cloudflare Web Analytics is currently disabled on the staging project. Choose and test an analytics setup and update the privacy notices before cutover if measurement continuity is required.
+The current public build includes Google Analytics. The documentation-style builder removes that include in both staging and production mode. Cloudflare Web Analytics is enabled for the staging project and is injected on deployment; verify its beacon and reporting, and update the privacy notices before cutover. Google Analytics history and reports are separate.
 
 ## Content and search
 
