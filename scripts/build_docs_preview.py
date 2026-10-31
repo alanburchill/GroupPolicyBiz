@@ -65,9 +65,13 @@ def main():
             if element:
                 element.decompose()
         shell = BeautifulSoup('''<header class="docs-header"><a class="docs-brand" href="/">Group Policy <span>Central</span></a><span class="header-divider"></span><span class="header-label">Documentation</span><button class="menu-toggle" aria-expanded="false" aria-controls="docs-sidebar">☰ <span>Browse</span></button><a class="header-github" href="https://github.com/alanburchill/GroupPolicyBiz">GitHub ↗</a></header><div class="docs-layout"><aside id="docs-sidebar" class="docs-sidebar"><div class="sidebar-heading">GROUP POLICY CENTRAL</div><label class="sidebar-search" for="site-search">Search the archive</label><input id="site-search" placeholder="Search articles..." autocomplete="off"><nav aria-label="Documentation navigation"><div class="nav-label">EXPLORE</div><a href="/">Overview</a><a href="/news/">News</a><a href="/best-practices/">Best practices</a><a href="/tutorials/">Tutorials</a><a href="/setting-of-the-week/">Setting of the week</a><div class="nav-label">LIBRARY</div><a href="/archives/">Browse all archives</a><a href="/group-policy-preferences/">Group Policy Preferences</a><a href="/teched/">TechEd</a><div class="nav-label">ABOUT</div><a href="/about/">About this archive</a></nav><p class="sidebar-note">Independent guides and historical resources for Windows administrators.</p></aside><main id="main-content" class="docs-main"></main><aside class="docs-toc" aria-label="On this page"><div>IN THIS ARTICLE</div><nav></nav></aside></div>''', 'html.parser')
-        # Keep search results beside their input, inside the sidebar's scroll area.
-        search_input = shell.select_one('#site-search')
-        search_input.wrap(shell.new_tag('div', attrs={'class': 'docs-search-box'}))
+        # Give archive search space in the header while keeping its accessible label.
+        search_box = shell.new_tag('div', attrs={'class': 'docs-search-box', 'role': 'search'})
+        search_label = shell.select_one('label[for="site-search"]')
+        search_label['class'] = ['visually-hidden']
+        search_box.append(search_label.extract())
+        search_box.append(shell.select_one('#site-search').extract())
+        shell.select_one('.header-github').insert_before(search_box)
         skip = soup.new_tag('a', href='#main-content', attrs={'class': 'skip-link'})
         skip.string = 'Skip to main content'
         soup.body.insert(0, skip)
