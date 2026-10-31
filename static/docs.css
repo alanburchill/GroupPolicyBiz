@@ -108,3 +108,14 @@ html[data-docs-theme="dark"] .docs-header .search-result-item:focus-visible{outl
 }
 @media(max-width:420px){.menu-toggle span{display:none}}
 @media(forced-colors:active){.docs-search-box input,.docs-header .search-results-dropdown{background:Canvas;color:CanvasText;border:1px solid CanvasText}}
+
+/* Use theme-appropriate hover surfaces without shifting article rows. */
+.docs-content .post-card:hover,.docs-content .post-card:focus-within{margin:0;padding:20px 0;border-radius:0}
+.docs-content .compact-post:hover,.docs-content .compact-post:focus-within{margin:0;padding:12px 0;border-radius:0}
+.docs-content .archive-year-link a:hover,.docs-content .archive-year-link a:focus-visible{margin:0;padding:1rem 0;border-radius:0}
+html[data-docs-theme="light"] .docs-content :is(.post-card:hover,.post-card:focus-within,.compact-post:hover,.compact-post:focus-within,.archive-year-link a:hover,.archive-year-link a:focus-visible){background:#e8f1f7}
+html[data-docs-theme="dark"] .docs-content :is(.post-card:hover,.post-card:focus-within,.compact-post:hover,.compact-post:focus-within,.archive-year-link a:hover,.archive-year-link a:focus-visible){background:#263c4b}
+html[data-docs-theme="dark"] .archive-year-link .year{color:#8dccff}
+@media (prefers-reduced-motion:no-preference){.docs-content :is(.post-card,.compact-post,.archive-year-link a){transition:background-color 220ms ease}}
+@media (prefers-reduced-motion:reduce){.docs-content :is(.post-card,.compact-post,.archive-year-link a){transition:none}}
+@media (forced-colors:active){html[data-docs-theme] .docs-content :is(.post-card:hover,.post-card:focus-within,.compact-post:hover,.compact-post:focus-within,.archive-year-link a:hover,.archive-year-link a:focus-visible){background:Canvas}}
