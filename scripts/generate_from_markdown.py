@@ -551,7 +551,8 @@ def main():
             register_extra_sitemap_page(route_path, priority=priority, changefreq=changefreq)
 
     def write_collection_page(route_path, page_title, heading, intro_html, items, canonical_path=None,
-                              priority='0.4', changefreq='monthly', empty_message='No matching posts were found.'):
+                              priority='0.4', changefreq='monthly', empty_message='No matching posts were found.',
+                              include_in_sitemap=True):
         compact_html = render_compact_list(items, empty_message=empty_message)
         count_html = f'<p class="archive-count">{len(items)} posts</p>' if items else ''
         body_html = f'''
@@ -565,7 +566,7 @@ def main():
             heading,
             body_html,
             canonical_path=canonical_path,
-            include_in_sitemap=True,
+            include_in_sitemap=include_in_sitemap,
             priority=priority,
             changefreq=changefreq,
         )
@@ -620,6 +621,7 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{page_title}</title>
+  <link rel="canonical" href="{absolute_url('/' if page_num == 1 else f'/page/{page_num}/')}">
   <link rel="stylesheet" href="{url('/styles.css')}">
   {head_extras_html}
 </head>
@@ -758,6 +760,7 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Category: {c} — GroupPolicy.biz</title>
+  <link rel="canonical" href="{absolute_url(legacy_category_map.get(c, f'/category/{slug}/'))}">
   <link rel="stylesheet" href="{url('/styles.css')}">
   {head_extras_html}
 </head>
@@ -812,6 +815,7 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tag: {t} — GroupPolicy.biz</title>
+  <link rel="canonical" href="{absolute_url(legacy_tag_map.get(t, f'/tag/{slug}/'))}">
   <link rel="stylesheet" href="{url('/styles.css')}">
   {head_extras_html}
 </head>
@@ -864,6 +868,7 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Archive: {year} — GroupPolicy.biz</title>
+  <link rel="canonical" href="{absolute_url(f'/archives/{year}/')}">
   <link rel="stylesheet" href="{url('/styles.css')}">
   {head_extras_html}
 </head>
@@ -942,6 +947,7 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Archives — GroupPolicy.biz</title>
+  <link rel="canonical" href="{absolute_url('/archives/')}">
   <link rel="stylesheet" href="{url('/styles.css')}">
   {head_extras_html}
 </head>
@@ -991,6 +997,12 @@ def main():
         src = Path('static') / asset
         if src.exists():
             shutil.copy2(src, output_dir / asset)
+    # The same build can be hosted at a preview or public origin.
+    if configured_site_url and (output_dir / 'robots.txt').exists():
+        robots_path = output_dir / 'robots.txt'
+        robots = robots_path.read_text(encoding='utf-8')
+        robots = re.sub(r'(?im)^Sitemap:\s*\S+\s*$', lambda _: 'Sitemap: ' + absolute_url('/sitemap.xml'), robots)
+        robots_path.write_text(robots, encoding='utf-8')
     
     # Copy uploads directory
     uploads_src = Path('uploads')
@@ -1014,6 +1026,7 @@ def main():
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>About & Privacy Policy — GroupPolicy.biz</title>
+  <link rel="canonical" href="{absolute_url('/about/')}">
   <link rel="stylesheet" href="{url('/styles.css')}">
   {head_extras_html}
 </head>
@@ -1253,6 +1266,7 @@ def main():
       ''',
       setting_posts,
       canonical_path='/setting-of-the-week/',
+      include_in_sitemap=False,
       priority='0.4',
       changefreq='weekly',
       empty_message='No Setting of the Week posts were found in the archive.',
@@ -1332,12 +1346,6 @@ def main():
       '/search_gcse/': '/search/',
     }
 
-    legacy_redirect_sitemap_routes = {
-      '/archives/setting-of-the-week/': ('0.3', 'monthly'),
-      '/search-2/': ('0.2', 'monthly'),
-      '/search_gcse/': ('0.2', 'monthly'),
-    }
-
     for legacy_path, target_path in legacy_redirect_routes.items():
         legacy_dir = output_dir / Path(legacy_path.strip('/'))
         legacy_dir.mkdir(parents=True, exist_ok=True)
@@ -1346,8 +1354,8 @@ def main():
             encoding='utf-8'
         )
 
-    for legacy_path, (priority, changefreq) in legacy_redirect_sitemap_routes.items():
-      register_extra_sitemap_page(legacy_path, priority=priority, changefreq=changefreq)
+    # Advertise the preferred destination, not compatibility redirects.
+    register_extra_sitemap_page('/setting-of-the-week/', priority='0.4', changefreq='weekly')
     
     # Generate sitemap.xml
     print('Generating sitemap.xml...')

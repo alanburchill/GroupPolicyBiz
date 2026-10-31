@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.grouppolicy.biz/sitemap.xml
+Sitemap: https://grouppolicy.biz/sitemap.xml
