@@ -6,12 +6,12 @@ Source for [Group Policy Central](https://grouppolicy.biz/), an independent arch
 
 | Site | Purpose | How it is deployed |
 | --- | --- | --- |
-| [grouppolicy.biz](https://grouppolicy.biz/) | Current public site | GitHub Actions generates and deploys the legacy layout to GitHub Pages from `main` when matching paths change. |
-| [Cloudflare staging](https://grouppolicy-central-staging.pages.dev/) | Documentation-style redesign for review | Cloudflare Pages builds from `main` automatically. It is publicly accessible but sends `noindex, nofollow`; this is not access control. |
+| [grouppolicy.biz](https://grouppolicy.biz/) | Public documentation-style archive | Cloudflare Pages automatically builds the `main` branch and serves the public domain. |
+| GitHub Pages | Legacy layout retained for rollback | GitHub Actions deploys the legacy layout from `main` when matching paths change. |
 
-The staging project is not the public website. Cloudflare hosts the domain's DNS, while the public website records still point to GitHub Pages. Branch preview deployments are disabled. Pull requests run a build-only validation job; they do not deploy the GitHub Pages site. The GitHub Pages production job runs on qualifying pushes to `main`. See [Cloudflare staging and cutover notes](CLOUDFLARE-STAGING.md) before changing the build command, custom domain or website DNS records.
+Cloudflare hosts DNS and the public site. The Pages project retains its historical name `grouppolicy-central-staging`; its default `pages.dev` address serves the production build and is not a separate noindex staging site. Branch preview builds are disabled. Pull requests run build-only validation. The GitHub Pages workflow remains available for rollback. See [Cloudflare deployment and rollback notes](CLOUDFLARE-STAGING.md).
 
-The current GitHub Pages build includes Google Analytics. The documentation-style builder removes that include in both staging and production mode and describes Cloudflare Web Analytics in its privacy policy. Cloudflare Web Analytics is enabled for the staging project and is injected on deployment; verify reporting on the public hostname at cutover. Google Analytics history and reports are separate.
+The public site uses Cloudflare Web Analytics and its privacy policy describes this. The legacy GitHub Pages build includes Google Analytics; its historical reports are separate.
 
 ## Content and search
 
@@ -52,7 +52,7 @@ For a staging-style build, use an origin that matches where the output will be s
 python scripts/verify_crawl_output.py _docs_preview --origin http://127.0.0.1:8002
 ```
 
-The check verifies sitemap/canonical agreement, crawler directives, the staging `noindex` header and a 404 page. A separate `--production` build mode is documented in the [cutover notes](CLOUDFLARE-STAGING.md); it produces an indexable artifact for the public origin and does not itself deploy or change DNS. Review crawler access, analytics, URL compatibility and rollback before a cutover.
+The check verifies sitemap/canonical agreement, crawler directives, the staging `noindex` header and a 404 page. The public Pages pipeline uses `--production` for an indexable artifact at the public origin. See the [deployment notes](CLOUDFLARE-STAGING.md) for the production command and rollback procedure.
 
 ## Repository layout
 
@@ -63,7 +63,7 @@ The check verifies sitemap/canonical agreement, crawler directives, the staging 
 - `scripts/build_docs_preview.py` — documentation-style build layered on the generator.
 - `scripts/verify_crawl_output.py` — crawler and sitemap checks for documentation builds.
 - `.github/workflows/deploy-pages.yml` — pull request validation and GitHub Pages deployment.
-- `CLOUDFLARE-STAGING.md` — staging settings and future cutover checks.
+- `CLOUDFLARE-STAGING.md` — production settings, verification and rollback notes.
 
 ## Contributing
 
