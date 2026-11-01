@@ -1,185 +1,137 @@
-// Live search functionality for static WordPress-like site
-(function() {
+// Search uses ordinary links so results work with Tab and screen readers.
+(function () {
   let searchIndex = [];
-  let searchInput = null;
-  let searchResults = null;
+  let loadState = 'loading';
+  let searchInput, searchResults, searchStatus, searchBox;
+  let searchTimeout;
+  let suppressFocusSearch = false;
 
-  function normalizeBasePath(basePath) {
-    if (!basePath || basePath === '/') {
-      return '/';
-    }
-
-    let normalized = basePath.trim();
-    if (!normalized.startsWith('/')) {
-      normalized = `/${normalized}`;
-    }
-    if (!normalized.endsWith('/')) {
-      normalized = `${normalized}/`;
-    }
-
-    return normalized;
+  function getBasePath() {
+    let base = (window.__SITE_CONFIG__ || {}).basePath || '/';
+    if (!base.startsWith('/')) base = '/' + base;
+    return base.endsWith('/') ? base : base + '/';
   }
 
-  function getSiteConfig() {
-    const config = window.__SITE_CONFIG__ || {};
-    const fallbackBasePath = window.location.pathname.match(/^\/[^\/]+\//)?.[0] || '/';
-
-    return {
-      basePath: normalizeBasePath(config.basePath || fallbackBasePath),
-      siteUrl: config.siteUrl || ''
-    };
+  function announce(message) {
+    searchStatus.textContent = message;
   }
-  
-  // Load search index
+
+  function hideResults() {
+    searchResults.hidden = true;
+    announce('');
+  }
+
+  function renderSearch() {
+    const query = searchInput.value.trim().toLowerCase();
+    if (query.length < 2) { hideResults(); return; }
+    searchResults.replaceChildren();
+    if (loadState !== 'ready') {
+      const message = loadState === 'loading' ? 'Loading search results.' : 'Search is unavailable. Please try again later.';
+      searchResults.textContent = message;
+      searchResults.hidden = false;
+      announce(message);
+      return;
+    }
+    const results = searchIndex.filter(post =>
+      [post.title, post.excerpt, ...(post.categories || []), ...(post.tags || [])]
+        .some(value => String(value || '').toLowerCase().includes(query))
+    ).slice(0, 10);
+    for (const post of results) {
+      let target;
+      try { target = new URL(post.url, location.origin); } catch (_) { continue; }
+      if (target.origin !== location.origin || !/^https?:$/.test(target.protocol)) continue;
+      const link = document.createElement('a');
+      link.className = 'search-result-item';
+      link.href = target.href;
+      const title = document.createElement('div');
+      title.className = 'search-result-title';
+      title.textContent = post.title;
+      const meta = document.createElement('div');
+      meta.className = 'search-result-meta';
+      meta.textContent = [post.date, (post.categories || []).join(', ')].filter(Boolean).join(' • ');
+      link.append(title, meta);
+      searchResults.append(link);
+    }
+    const count = searchResults.childElementCount;
+    const message = count ? `${count} result${count === 1 ? '' : 's'}. Use Tab to browse results.` : 'No posts found.';
+    const footer = document.createElement('div');
+    footer.className = count ? 'search-result-footer' : 'search-no-results';
+    footer.textContent = count ? `${count} result${count === 1 ? '' : 's'}` : 'No posts found';
+    searchResults.append(footer);
+    searchResults.hidden = false;
+    announce(message);
+  }
+
   async function loadSearchIndex() {
     try {
-      const { basePath } = getSiteConfig();
-      const searchIndexUrl = `${basePath}search-index.json`;
-      
-      const response = await fetch(searchIndexUrl);
-      searchIndex = await response.json();
-      console.log(`Loaded ${searchIndex.length} posts for search`);
-    } catch (error) {
-      console.error('Failed to load search index:', error);
-    }
+      const response = await fetch(`${getBasePath()}search-index.json`);
+      if (!response.ok) throw new Error('Search index unavailable');
+      const data = await response.json();
+      if (!Array.isArray(data)) throw new Error('Invalid search index');
+      searchIndex = data;
+      loadState = 'ready';
+    } catch (_) { loadState = 'error'; }
+    if (searchBox.contains(document.activeElement)) renderSearch();
   }
-  
-  // Create search results dropdown
-  function createSearchResultsContainer() {
-    const container = document.createElement('div');
-    container.id = 'search-results';
-    container.className = 'search-results-dropdown';
-    container.style.display = 'none';
-    return container;
-  }
-  
-  // Perform search
-  function performSearch(query) {
-    if (!query || query.length < 2) {
-      hideSearchResults();
-      return;
-    }
-    
-    query = query.toLowerCase();
-    const results = searchIndex.filter(post => {
-      return post.title.toLowerCase().includes(query) ||
-             post.excerpt.toLowerCase().includes(query) ||
-             post.categories.some(c => c.toLowerCase().includes(query)) ||
-             post.tags.some(t => t.toLowerCase().includes(query));
-    }).slice(0, 10); // Limit to 10 results
-    
-    displaySearchResults(results, query);
-  }
-  
-  // Display search results
-  function displaySearchResults(results, query) {
-    if (!searchResults) return;
-    
-    if (results.length === 0) {
-      searchResults.innerHTML = '<div class="search-no-results">No posts found</div>';
-      searchResults.style.display = 'block';
-      return;
-    }
-    
-    const html = results.map(post => {
-      const highlightedTitle = post.title.replace(
-        new RegExp(`(${escapeRegex(query)})`, 'gi'),
-        '<mark>$1</mark>'
-      );
-      return `
-        <a href="${post.url}" class="search-result-item">
-          <div class="search-result-title">${highlightedTitle}</div>
-          <div class="search-result-meta">${post.date} • ${post.categories.join(', ')}</div>
-        </a>
-      `;
-    }).join('');
-    
-    searchResults.innerHTML = html + `<div class="search-result-footer">${results.length} result${results.length > 1 ? 's' : ''}</div>`;
-    searchResults.style.display = 'block';
-  }
-  
-  // Hide search results
-  function hideSearchResults() {
-    if (searchResults) {
-      searchResults.style.display = 'none';
-    }
-  }
-  
-  // Escape regex special characters
-  function escapeRegex(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
-  
-  // Initialize search
+
   function initSearch() {
     searchInput = document.getElementById('site-search');
     if (!searchInput) return;
-    
-    // Create results container
-    searchResults = createSearchResultsContainer();
-    const searchBox = searchInput.parentElement;
+    searchBox = searchInput.parentElement;
     searchBox.style.position = 'relative';
-    searchBox.appendChild(searchResults);
-    
-    // Event listeners
-    let searchTimeout;
-    searchInput.addEventListener('input', (e) => {
+    searchInput.setAttribute('aria-controls', 'search-results');
+    searchResults = document.createElement('div');
+    searchResults.id = 'search-results';
+    searchResults.className = 'search-results-dropdown';
+    searchResults.setAttribute('role', 'region');
+    searchResults.setAttribute('aria-label', 'Search results');
+    searchResults.hidden = true;
+    searchStatus = document.createElement('div');
+    searchStatus.className = 'search-status';
+    searchStatus.setAttribute('role', 'status');
+    searchStatus.setAttribute('aria-atomic', 'true');
+    searchBox.append(searchResults, searchStatus);
+    searchInput.addEventListener('input', () => {
       clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        performSearch(e.target.value);
-      }, 300); // Debounce 300ms
+      searchTimeout = setTimeout(renderSearch, 300);
     });
-    
-    searchInput.addEventListener('focus', (e) => {
-      if (e.target.value.length >= 2) {
-        performSearch(e.target.value);
+    searchInput.addEventListener('focus', () => {
+      if (!suppressFocusSearch) renderSearch();
+    });
+    searchBox.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !searchResults.hidden) {
+        clearTimeout(searchTimeout);
+        hideResults();
+        suppressFocusSearch = true;
+        searchInput.focus();
+        suppressFocusSearch = false;
+        event.preventDefault();
       }
     });
-    
-    // Close on click outside
-    document.addEventListener('click', (e) => {
-      if (!searchBox.contains(e.target)) {
-        hideSearchResults();
-      }
+    searchBox.addEventListener('focusout', event => {
+      if (!searchBox.contains(event.relatedTarget)) { clearTimeout(searchTimeout); hideResults(); }
     });
-    
-    // Keyboard navigation
-    searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        hideSearchResults();
-        searchInput.blur();
-      }
+    document.addEventListener('click', event => {
+      if (!searchBox.contains(event.target)) hideResults();
     });
+    loadSearchIndex();
   }
-  
-  // Theme toggle (reuse from existing code)
+
   function initThemeToggle() {
     const toggle = document.getElementById('theme-toggle');
     if (!toggle) return;
-    
     const currentTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', currentTheme);
     toggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-    
     toggle.addEventListener('click', () => {
       const theme = document.documentElement.getAttribute('data-theme');
-      const newTheme = theme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      const next = theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      toggle.textContent = next === 'dark' ? '☀️' : '🌙';
     });
   }
-  
-  // Initialize on DOM ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      loadSearchIndex();
-      initSearch();
-      initThemeToggle();
-    });
-  } else {
-    loadSearchIndex();
-    initSearch();
-    initThemeToggle();
-  }
+    document.addEventListener('DOMContentLoaded', () => { initSearch(); initThemeToggle(); });
+  } else { initSearch(); initThemeToggle(); }
 })();

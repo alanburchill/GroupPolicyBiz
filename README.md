@@ -9,9 +9,9 @@ Source for [Group Policy Central](https://grouppolicy.biz/), an independent arch
 | [grouppolicy.biz](https://grouppolicy.biz/) | Current public site | GitHub Actions generates and deploys the legacy layout to GitHub Pages from `main` when matching paths change. |
 | [Cloudflare staging](https://grouppolicy-central-staging.pages.dev/) | Documentation-style redesign for review | Cloudflare Pages builds from `main` automatically. It is publicly accessible but sends `noindex, nofollow`; this is not access control. |
 
-The staging project is not the public domain and DNS has not been cut over. Branch preview deployments are disabled. Pull requests run a build-only validation job; they do not deploy the GitHub Pages site. The GitHub Pages production job runs on qualifying pushes to `main`. See [Cloudflare staging and cutover notes](CLOUDFLARE-STAGING.md) before changing the build command, custom domain or DNS.
+The staging project is not the public website. Cloudflare hosts the domain's DNS, while the public website records still point to GitHub Pages. Branch preview deployments are disabled. Pull requests run a build-only validation job; they do not deploy the GitHub Pages site. The GitHub Pages production job runs on qualifying pushes to `main`. See [Cloudflare staging and cutover notes](CLOUDFLARE-STAGING.md) before changing the build command, custom domain or website DNS records.
 
-The current public build includes Google Analytics. The documentation-style builder removes that include in both staging and production mode. Cloudflare Web Analytics is enabled for the staging project and is injected on deployment; verify its beacon and reporting, and update the privacy notices before cutover. Google Analytics history and reports are separate.
+The current GitHub Pages build includes Google Analytics. The documentation-style builder removes that include in both staging and production mode and describes Cloudflare Web Analytics in its privacy policy. Cloudflare Web Analytics is enabled for the staging project and is injected on deployment; verify reporting on the public hostname at cutover. Google Analytics history and reports are separate.
 
 ## Content and search
 
