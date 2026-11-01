@@ -19,6 +19,8 @@ Articles live under `content/posts/YYYY/MM/`, with a date and slug in each filen
 
 The browser search index covers **titles, the first approximately 250 characters of each article, categories and tags**. Search is case-insensitive substring matching, displays up to 10 results in archive order, and runs in the browser. It is not full-article, semantic or vector search.
 
+Each build generates `llms.txt` with links to key archive sections and the latest 30 articles as RSS (`/feed.xml`) and Atom (`/atom.xml`). Feed links and article URLs use the build's configured origin. The archive's undated-timezone timestamps are interpreted as UTC; Atom update dates use the original publication date because the archive does not track reliable per-article modification dates.
+
 ## Local preview
 
 The documentation-style build uses Python and the pinned packages in `requirements-cloudflare.txt`. Use a new, empty output directory: the builder refuses to overwrite an existing non-empty directory.
