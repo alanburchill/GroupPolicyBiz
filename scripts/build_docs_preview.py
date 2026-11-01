@@ -97,6 +97,24 @@ def main():
         target['tabindex'] = '-1'
         main.attrs['class'] = ['docs-content']
         target.append(main)
+        relative_page = path.relative_to(output).as_posix()
+        if relative_page == 'about/privacy-policy/index.html':
+            privacy = main.select_one('.post-content')
+            privacy.clear()
+            privacy.append(BeautifulSoup('''<p>Last updated: 1 November 2026</p><p>This static archive does not provide user accounts, comments or contact forms.</p><h2>Analytics</h2><p>We use Cloudflare Web Analytics to understand visits, page views and website performance. The site loads a Cloudflare analytics script that sends usage and performance measurements to Cloudflare. Cloudflare describes its Web Analytics as not using cookies or local storage to track visitors across sites. See <a href="https://developers.cloudflare.com/web-analytics/">Cloudflare Web Analytics documentation</a> and <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a> for details.</p><h2>Theme preference</h2><p>The site can store your light or dark theme preference in your browser's local storage.</p><h2>Hosting and external links</h2><p>Cloudflare hosts this site and receives network requests needed to deliver it. Links to other websites are governed by those sites' own privacy policies.</p><h2>Contact</h2><p>For questions about this archive, use the <a href="https://github.com/alanburchill/GroupPolicyBiz">Group Policy Central GitHub repository</a>.</p>''', 'html.parser'))
+        elif relative_page == 'about/index.html':
+            heading = main.select_one('#privacy-policy')
+            if heading:
+                sibling = heading.find_next_sibling()
+                while sibling and not (sibling.name == 'h3' and sibling.get_text(strip=True) == 'Content'):
+                    following = sibling.find_next_sibling()
+                    sibling.decompose()
+                    sibling = following
+                summary = BeautifulSoup('<p>For information about Cloudflare Web Analytics, local theme storage and external links, see the <a href="/about/privacy-policy/">privacy policy</a>.</p>', 'html.parser')
+                heading.insert_after(summary)
+            for paragraph in main.select('p'):
+                if 'Separately, Google Analytics' in paragraph.get_text():
+                    paragraph.string = 'This site can store your light or dark theme preference in your browser’s local storage.'
         for thumbnail in main.select('.post-card img.thumb:not([alt])'):
             thumbnail['alt'] = ''  # The adjacent article title names this link.
         if main.select_one('.post-full header h1'):
