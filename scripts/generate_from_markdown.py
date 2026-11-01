@@ -15,6 +15,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import markdown
 from collections import defaultdict
+from generate_discovery import write_discovery
 
 # Import shared functions from the WordPress generator
 import sys
@@ -314,7 +315,9 @@ def main():
         'basePath': configured_base_path,
         'siteUrl': configured_site_url,
     })
-    head_extras_html = f'<script>window.__SITE_CONFIG__ = {site_config_json};</script>'
+    head_extras_html = f'''<link rel="alternate" type="application/rss+xml" title="Group Policy Central RSS" href="{absolute_url('/feed.xml')}">
+  <link rel="alternate" type="application/atom+xml" title="Group Policy Central Atom" href="{absolute_url('/atom.xml')}">
+  <script>window.__SITE_CONFIG__ = {site_config_json};</script>'''
     ga_include_html = load_optional_html_include(Path('static/includes/google-analytics.html'))
     ga_script_html = ga_include_html or ga_tracking_script()
     if ga_script_html:
@@ -416,6 +419,7 @@ def main():
     posts.sort(key=lambda post: (post['date'], post['canonical_path']), reverse=True)
 
     print(f'Read {len(posts)} posts')
+    write_discovery(output_dir, posts, absolute_url)
     
     # Build category and tag maps
     cats_map = defaultdict(list)
