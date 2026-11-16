@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 from urllib.parse import urlsplit
 from bs4 import BeautifulSoup
+from markdownify import markdownify
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -151,7 +152,15 @@ def main():
         script = soup.new_tag('script', src='/docs.js', defer=True)
         soup.body.append(script)
         path.write_text(str(soup), encoding='utf-8')
+        for element in main.select('script, style, nav, button, input'):
+            element.decompose()
+        markdown_path = output / '_markdown' / path.relative_to(output).with_suffix('.txt')
+        markdown_path.parent.mkdir(parents=True, exist_ok=True)
+        markdown = markdownify(str(main), heading_style='ATX').strip()
+        if markdown:
+            markdown_path.write_text(markdown + '\n', encoding='utf-8')
         count += 1
+    (output / '_worker.js').write_bytes((ROOT / 'static/markdown-worker.js').read_bytes())
     print(f'Documentation preview styled {count} pages in {output}; redirects preserved.')
 
 if __name__ == '__main__':

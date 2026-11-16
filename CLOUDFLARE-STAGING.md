@@ -15,6 +15,10 @@ Production mode omits the staging noindex directives and uses the public origin 
 
 At launch, verify the public domain, redirects, canonical links and sitemap all agree, missing URLs return HTTP 404, no noindex header or meta tag remains, robots.txt permits intended search crawlers, and Cloudflare security rules allow verified crawlers. Submit the sitemap through search-engine webmaster tools and inspect representative live URLs. These checks do not guarantee indexing, ranking or AI citations. Article summaries and structured metadata are tracked separately in issue #7.
 
+## Markdown content negotiation
+
+The Pages build generates Markdown from each styled page's main content. Its edge worker serves those assets for requests that prefer `text/markdown`, and varies HTML responses by `Accept`. The built-in Markdown for Agents converter requires a supported paid zone plan.
+
 ## Rollback to GitHub Pages
 
 The prior DNS-only apex records were four A records (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`) and four AAAA records (`2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`). The previous DNS-only www CNAME targeted `alanburchill.github.io`. The prior TTL was 300 seconds. Preserve unrelated DNS records.
